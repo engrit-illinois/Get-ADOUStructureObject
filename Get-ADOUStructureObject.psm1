@@ -125,6 +125,8 @@ function Get-ADOUStructureObject {
 		#Export-Children $object 1
 		#Export $nameEnd 0
 		
+		Export "" 0 $false
+		
 		Export-ChildOus $object 0
 	}
 	
