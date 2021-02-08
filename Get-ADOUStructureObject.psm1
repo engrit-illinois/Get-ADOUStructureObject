@@ -3,7 +3,8 @@ function Get-ADOUStructureObject {
 	param(
 		[string]$OUDN,
 		[string]$OutputFilePath,
-		[switch]$OutputFormat = "Human"
+		[switch]$OutputFormat = "Human",
+		[string]$IndentChar = "	"
 	)
 	
 	$ous = Get-ADOrganizationalUnit -Filter "*" -SearchBase $OUDN
@@ -59,7 +60,7 @@ function Get-ADOUStructureObject {
 			"XML" {
 				switch($type) {
 					"comp" {
-						return "<comp><name>$name</name></comp>"
+						return "<computer><name>$name</name></computer>"
 					}
 					"ou" {
 						switch($side) {
@@ -102,12 +103,23 @@ function Get-ADOUStructureObject {
 		
 		$indent = ""
 		for($i = 0; $i -lt $depth; $i += 1) {
-			$indent = "$indent	"
+			$indent = "$indent$IndentChar"
+		}
+		
+		if($OutputFormat -eq "XML") {
+			Export "$indent<computers>"
 		}
 		
 		foreach($comp in $object.Computers) {
+			if($OutputFormat -eq "XML") {
+				$indent = "$indent$IndentChar"
+			}
 			$name = Get-ExportFormatted "comp" $name
 			Export "$indent$name"
+		}
+		
+		if($OutputFormat -eq "XML") {
+			Export "$indent</computers>"
 		}
 	}
 	
@@ -115,7 +127,7 @@ function Get-ADOUStructureObject {
 		
 		$indent = ""
 		for($i = 0; $i -lt $depth; $i += 1) {
-			$indent = "$indent	"
+			$indent = "$indentIndentChar"
 		}
 		
 		foreach($child in $object.Children) {
