@@ -121,6 +121,8 @@ function Get-ADOUStructureObject {
 		#Export-Children $object 1
 		#Export $nameEnd 0
 		
+		Export "<?xml version=`"1.0`" encoding=`"UTF-8`"?>"
+		
 		Export-Ou $object 0
 	}
 	
@@ -196,9 +198,11 @@ function Get-ADOUStructureObject {
 		Export $ouCapEnd $indent
 	}
 	
-	function Export($string, $indentSize, $append=$true) {
+	function Export($string, $indentSize=0, $append=$true) {
 		if($string -ne $null) {
-			New-Item -ItemType File -Force -Path $OutputFilePath | Out-Null
+			if(!(Test-Path -PathType leaf -Path $OutputFilePath)) {
+				New-Item -ItemType File -Force -Path $OutputFilePath | Out-Null
+			}
 			
 			$indent = ""
 			for($i = 0; $i -lt $indentSize; $i += 1) {
