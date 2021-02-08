@@ -121,7 +121,7 @@ function Get-ADOUStructureObject {
 		#Export-Children $object 1
 		#Export $nameEnd 0
 		
-		Export "<?xml version=`"1.0`" encoding=`"UTF-8`"?>"
+		Export "<?xml version=`"1.0`" encoding=`"UTF-8`"?>" $true
 		
 		Export-Ou $object 0
 	}
