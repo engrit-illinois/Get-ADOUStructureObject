@@ -2,7 +2,8 @@
 function Get-ADOUStructureObject {
 	param(
 		[string]$OUDN,
-		[string]$OutputFilePath
+		[string]$OutputFilePath,
+		[switch]$OutputFormat = "Human"
 	)
 	
 	$ous = Get-ADOrganizationalUnit -Filter "*" -SearchBase $OUDN
@@ -36,14 +37,58 @@ function Get-ADOUStructureObject {
 		$object | ConvertTo-Json -Depth 3
 	}
 	
+	function Get-ExportFormatted($type, $name, $side="comp") {
+		switch($OutputFormat) {
+			"Human" {
+				switch($type) {
+					"comp" {
+						return $name
+					}
+					"ou" {
+						switch($side) {
+							"start" { return "[$name]" }
+							"end" { return "End [$name]" }
+							Default { return "Invalid `$end sent to Get-ExportFormatted()!" }
+						}
+					}
+					Default {
+						return "Invalid $type sent to Get-ExportFormatted()!"
+					}
+				}
+			}
+			"XML" {
+				switch($type) {
+					"comp" {
+						return "<comp><name>$name</name></comp>"
+					}
+					"ou" {
+						switch($side) {
+							"start" { return "<ou><name>$name</name>" }
+							"end" { return "</ou>" }
+							Default { return "Invalid `$end sent to Get-ExportFormatted()!" }
+						}
+					}
+					Default {
+						return "Invalid $type sent to Get-ExportFormatted()!"
+					}
+				}
+			}
+			Default {
+				return "Invalid $OutputFormat!"
+			}
+		}
+	}
+	
 	function Export-Structure($object) {
 		$name = $($object.OU.Name)
+		$nameStart = Get-ExportFormatted "ou" $name "start" 
+		$nameEnd = Get-ExportFormatted "ou" $name "end"
 		
-		Export "[$name]" $false
+		Export $nameStart $false
 		
 		Export-Children $object 1
 		
-		Export "End [$name]"]
+		Export $nameEnd
 	}
 	
 	function Export-Children($object, $depth) {
@@ -61,7 +106,7 @@ function Get-ADOUStructureObject {
 		}
 		
 		foreach($comp in $object.Computers) {
-			$name = $comp.Name
+			$name = Get-ExportFormatted "comp" $name
 			Export "$indent$name"
 		}
 	}
@@ -74,10 +119,13 @@ function Get-ADOUStructureObject {
 		}
 		
 		foreach($child in $object.Children) {
-			$name = $child.OU.Name
-			Export "$($indent)[$name]"
+			$name = $($object.OU.Name)
+			$nameStart = Get-ExportFormatted "ou" $name "start" 
+			$nameEnd = Get-ExportFormatted "ou" $name "end"
+			
+			Export "$($indent)$nameStart"
 			Export-Children $child ($depth + 1)
-			Export "$($indent)End [$name]"
+			Export "$($indent)$nameEnd"
 		}
 	}
 	
