@@ -200,7 +200,7 @@ function Get-ADOUStructureObject {
 		$indent1 = $indent + 1
 		
 		$ouCapstart = Get-ExportFormatted "ouCap" $object.OU.Name "start"
-		Export $ouCapStart $indent
+		Export $ouCapStart $indent $true $true
 		
 		$nameStart = Get-ExportFormatted "ou" $object.OU.Name
 		Export $nameStart $indent1
@@ -211,7 +211,7 @@ function Get-ADOUStructureObject {
 		Export $ouCapEnd $indent
 	}
 	
-	function Export($string, $indentSize=0, $append=$true) {
+	function Export($string, $indentSize=0, $append=$true, $nonewline=$false) {
 		if($string -ne $null) {
 			if(!(Test-Path -PathType leaf -Path $OutputFilePath)) {
 				New-Item -ItemType File -Force -Path $OutputFilePath | Out-Null
@@ -224,10 +224,20 @@ function Get-ADOUStructureObject {
 			$string = "$indent$string"
 			
 			if($append) {
-				$string | Out-File $OutputFilePath -Encoding ascii -Append
+				if($nonewline) {
+					$string | Out-File $OutputFilePath -Encoding ascii -Append -NoNewline
+				}
+				else {
+					$string | Out-File $OutputFilePath -Encoding ascii -Append
+				}
 			}
 			else {
-				$string | Out-File $OutputFilePath -Encoding ascii
+				if($nonewline) {
+					$string | Out-File $OutputFilePath -Encoding ascii -NoNewline
+				}
+				else {
+					$string | Out-File $OutputFilePath -Encoding ascii
+				}
 			}
 		}
 	}
