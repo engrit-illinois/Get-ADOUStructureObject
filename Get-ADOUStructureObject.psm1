@@ -69,17 +69,14 @@ function Get-ADOUStructureObject {
 							"end" { return "End [$name]" }
 							Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
 						}
-					"ousCap" { return $null }
-					Default {
-						return "Invalid `$type sent to Get-ExportFormatted()!"
 					}
+					"ousCap" { return $null }
+					Default { return "Invalid `$type sent to Get-ExportFormatted()!" }
 				}
 			}
 			"XML" {
 				switch($type) {
-					"comp" {
-						return "<computer><name>$name</name></computer>"
-					}
+					"comp" { return "<computer><name>$name</name></computer>" }
 					"compCap" {
 						# Currently doing this on the same line as each comp
 						return $null
@@ -106,9 +103,7 @@ function Get-ADOUStructureObject {
 							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
 						}
 					}
-					Default {
-						return "Invalid `$type sent to Get-ExportFormatted()!"
-					}
+					Default { return "Invalid `$type sent to Get-ExportFormatted()!" }
 				}
 			}
 			Default {
