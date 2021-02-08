@@ -71,9 +71,8 @@ function Get-ADOUStructureObject {
 									Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
 								}
 							}
-							Default {
-								return "<name>$name</name>" }
-							}
+							Default { return "<name>$name</name>" }
+						}
 					}
 					Default {
 						return "Invalid `$type sent to Get-ExportFormatted()!"
@@ -105,57 +104,53 @@ function Get-ADOUStructureObject {
 		Export-ChildOus $object $depth
 	}
 	
-	function Export-ChildComps($object, $depth) {
-		
-		$indent = ""
-		for($i = 0; $i -lt $depth; $i += 1) {
-			$indent = "$indent$IndentChar"
-		}
+	function Export-ChildComps($object, $indent) {
 		
 		$start = Get-ExportFormatted "comp" $null "start"
-		Export "$indent$start"
+		Export $start $indent
 		
 		foreach($comp in $object.Computers) {
 			if($OutputFormat -eq "XML") {
-				$compIndent = "$indent$IndentChar"
+				$compIndent = $indent + 1
 			}
 			$name = Get-ExportFormatted "comp" $comp.Name
-			Export "$compIndent$name"
+			Export $name $compIndent
 		}
 		
 		$end = Get-ExportFormatted "comp" $null "end"
-		Export "$indent$end"
+		Export $end $indent
 	}
 	
-	function Export-ChildOus($object, $depth) {
-		
-		$indent = ""
-		for($i = 0; $i -lt $depth; $i += 1) {
-			$indent = "$indent$IndentChar"
-		}
+	function Export-ChildOus($object, $indent) {
 		
 		foreach($child in $object.Children) {
 			$start = Get-ExportFormatted "ou" $null "start"
-			Export "$indent$start"
+			Export $start $indent
 			
 			$name = $child.OU.Name
 			$nameStart = Get-ExportFormatted "ou" $name "start" 
 			$nameEnd = Get-ExportFormatted "ou" $name "end"
 			
-			Export "$($indent)$nameStart"
-			Export-Children $child ($depth + 1)
-			Export "$($indent)$nameEnd"
+			Export $nameStart $indent
+			Export-Children $child ($indent + 1)
+			Export $nameEnd $indent
 			
 			$end = Get-ExportFormatted "ou" $null "end"
-			Export "$indent$end"
+			Export $end $indent
 		}
 	}
 	
-	function Export($string, $append=$true) {
+	function Export($string, $indentSize, $append=$true) {
 		if($string -ne $null) {
 			if(!(Test-Path -PathType leaf -Path $OutputFilePath)) {
 				New-Item -ItemType File -Force -Path $OutputFilePath | Out-Null
 			}
+			
+			$indent = ""
+			for($i = 0; $i -lt $indentSize; $i += 1) {
+				$indent = "$indent$IndentChar"
+			}
+			$string = "$indent$string"
 			
 			if($append) {
 				$string | Out-File $OutputFilePath -Encoding ascii -Append
