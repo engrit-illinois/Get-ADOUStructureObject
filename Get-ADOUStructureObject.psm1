@@ -49,11 +49,11 @@ function Get-ADOUStructureObject {
 						switch($side) {
 							"start" { return "[$name]" }
 							"end" { return "End [$name]" }
-							Default { return "Invalid `$end sent to Get-ExportFormatted()!" }
+							Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
 						}
 					}
 					Default {
-						return "Invalid $type sent to Get-ExportFormatted()!"
+						return "Invalid `$type sent to Get-ExportFormatted()!"
 					}
 				}
 			}
@@ -66,16 +66,16 @@ function Get-ADOUStructureObject {
 						switch($side) {
 							"start" { return "<ou><name>$name</name>" }
 							"end" { return "</ou>" }
-							Default { return "Invalid `$end sent to Get-ExportFormatted()!" }
+							Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
 						}
 					}
 					Default {
-						return "Invalid $type sent to Get-ExportFormatted()!"
+						return "Invalid `$type sent to Get-ExportFormatted()!"
 					}
 				}
 			}
 			Default {
-				return "Invalid $OutputFormat!"
+				return "Invalid `$OutputFormat!"
 			}
 		}
 	}
@@ -114,7 +114,7 @@ function Get-ADOUStructureObject {
 			if($OutputFormat -eq "XML") {
 				$indent = "$indent$IndentChar"
 			}
-			$name = Get-ExportFormatted "comp" $name
+			$name = Get-ExportFormatted "comp" $comp.Name
 			Export "$indent$name"
 		}
 		
