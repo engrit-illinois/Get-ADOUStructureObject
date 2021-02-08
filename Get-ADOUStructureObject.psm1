@@ -3,7 +3,7 @@ function Get-ADOUStructureObject {
 	param(
 		[string]$OUDN,
 		[string]$OutputFilePath,
-		[switch]$OutputFormat = "Human",
+		[string]$OutputFormat = "Human",
 		[string]$IndentChar = "	"
 	)
 	
