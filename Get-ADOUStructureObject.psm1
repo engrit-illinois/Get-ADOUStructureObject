@@ -38,13 +38,14 @@ function Get-ADOUStructureObject {
 		$object | ConvertTo-Json -Depth 3
 	}
 	
-	function Get-ExportFormatted($type, $name="cap", $side="comp") {
+	function Get-ExportFormatted($type, $name, $side) {
 		switch($OutputFormat) {
 			"Human" {
 				switch($type) {
 					"comp" {
 						return $name
 					}
+					"compCap" { return $null }
 					"ou" {
 						switch($side) {
 							"start" { return "[$name]" }
@@ -52,6 +53,7 @@ function Get-ADOUStructureObject {
 							Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
 						}
 					}
+					"ouCap" { return $null }
 					Default {
 						return "Invalid `$type sent to Get-ExportFormatted()!"
 					}
@@ -62,16 +64,19 @@ function Get-ADOUStructureObject {
 					"comp" {
 						return "<computer><name>$name</name></computer>"
 					}
-					"ou" {
-						switch($name) {
-							"cap" {
-								switch($side) {
-									"start" { return "<ou>" }
-									"end" { return "</ou>" }
-									Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
-								}
-							}
-							Default { return "<name>$name</name>" }
+					"compCamp" {
+						switch($side) {
+							"start" { return "<computers>" }
+							"end" { return "</computers>" }
+							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
+						}
+					}
+					"ou" { return "<name>$name</name>" }
+					"compCamp" {
+						switch($side) {
+							"start" { return "<ou>" }
+							"end" { return "</ou>" }
+							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
 						}
 					}
 					Default {
@@ -106,7 +111,7 @@ function Get-ADOUStructureObject {
 	
 	function Export-ChildComps($object, $indent) {
 		
-		$start = Get-ExportFormatted "comp" $null "start"
+		$start = Get-ExportFormatted "compCap" $null "start"
 		Export $start $indent
 		
 		foreach($comp in $object.Computers) {
@@ -117,25 +122,27 @@ function Get-ADOUStructureObject {
 			Export $name $compIndent
 		}
 		
-		$end = Get-ExportFormatted "comp" $null "end"
+		$end = Get-ExportFormatted "compCap" $null "end"
 		Export $end $indent
 	}
 	
 	function Export-ChildOus($object, $indent) {
 		
 		foreach($child in $object.Children) {
-			$start = Get-ExportFormatted "ou" $null "start"
+			$start = Get-ExportFormatted "ouCap" $null "start"
 			Export $start $indent
 			
 			$name = $child.OU.Name
-			$nameStart = Get-ExportFormatted "ou" $name "start" 
-			$nameEnd = Get-ExportFormatted "ou" $name "end"
 			
+			$nameStart = Get-ExportFormatted "ou" $name "start" 
 			Export $nameStart $indent
+			
 			Export-Children $child ($indent + 1)
+			
+			$nameEnd = Get-ExportFormatted "ou" $name "end"
 			Export $nameEnd $indent
 			
-			$end = Get-ExportFormatted "ou" $null "end"
+			$end = Get-ExportFormatted "ouCap" $null "end"
 			Export $end $indent
 		}
 	}
