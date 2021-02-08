@@ -61,14 +61,13 @@ function Get-ADOUStructureObject {
 						# Currently doing this on the same line as each comp
 					}
 					"compsCap" { return $null }
-					"ou" {
+					"ou" { return $null }
+					"ouCap" {
 						switch($side) {
 							"start" { return "[$name]" }
 							"end" { return "End [$name]" }
 							Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
 						}
-					}
-					"ouCap" { return $null }
 					"ousCap" { return $null }
 					Default {
 						return "Invalid `$type sent to Get-ExportFormatted()!"
@@ -125,8 +124,6 @@ function Get-ADOUStructureObject {
 		#Export-Children $object 1
 		#Export $nameEnd 0
 		
-		Export "" 0 $false
-		
 		Export-ChildOus $object 0
 	}
 	
@@ -168,39 +165,43 @@ function Get-ADOUStructureObject {
 	function Export-ChildOus($object, $indent) {
 		
 		$indent1 = $indent
-		$indent2 = $indent
 		if($OUTPUT_FORMAT_CAPS) {
 			$indent1 = $indent + 1
-			$indent2 = $indent + 2
 		}
 		
 		$ousCapStart = Get-ExportFormatted "ousCap" $null "start"
 		Export $ousCapStart $indent
 		
 		foreach($child in $object.Children) {
-			$ouCapstart = Get-ExportFormatted "ouCap" $null "start"
-			Export $ouCapStart $indent1
-			
-			$name = $child.OU.Name
-			
-			$nameStart = Get-ExportFormatted "ou" $name "start" 
-			Export $nameStart $indent2
-			
-			Export-Children $child $indent2
-			
-			$ouCapEnd = Get-ExportFormatted "ouCap" $null "end"
-			Export $ouCapEnd $indent1
+			Export-Ou $child $indent1
 		}
 		
 		$ousCapEnd = Get-ExportFormatted "ousCap" $null "end"
 		Export $ousCapEnd $indent
 	}
 	
+	function Export-Ou($object, $indent) {
+		
+		$indent1 = $indent
+		if($OUTPUT_FORMAT_CAPS) {
+			$indent1 = $indent + 1
+		}
+		
+		$ouCapstart = Get-ExportFormatted "ouCap" $null "start"
+		Export $ouCapStart $indent
+		
+		$nameStart = Get-ExportFormatted "ou" $object.OU.Name "start"
+		Export $nameStart $indent1
+		
+		Export-Children $child $indent1
+		
+		$ouCapEnd = Get-ExportFormatted "ouCap" $null "end"
+		Export $ouCapEnd $indent
+	}
+	
 	function Export($string, $indentSize, $append=$true) {
 		if($string -ne $null) {
-			if(!(Test-Path -PathType leaf -Path $OutputFilePath)) {
-				New-Item -ItemType File -Force -Path $OutputFilePath | Out-Null
-			}
+			New-Item -ItemType File -Force -Path $OutputFilePath | Out-Null
 			
 			$indent = ""
 			for($i = 0; $i -lt $indentSize; $i += 1) {
