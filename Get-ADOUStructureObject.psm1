@@ -131,7 +131,7 @@ function Get-ADOUStructureObject {
 		}
 		
 		foreach($child in $object.Children) {
-			$name = $($object.OU.Name)
+			$name = $child.OU.Name
 			$nameStart = Get-ExportFormatted "ou" $name "start" 
 			$nameEnd = Get-ExportFormatted "ou" $name "end"
 			
