@@ -57,7 +57,9 @@ function Get-ADOUStructureObject {
 					"comp" {
 						return $name
 					}
-					"compCap" { # Currently doing this on the same line as each comp }
+					"compCap" { 
+						# Currently doing this on the same line as each comp
+					}
 					"compsCap" { return $null }
 					"ou" {
 						switch($side) {
@@ -78,7 +80,9 @@ function Get-ADOUStructureObject {
 					"comp" {
 						return "<computer><name>$name</name></computer>"
 					}
-					"compCap" { # Currently doing this on the same line as each comp }
+					"compCap" {
+						# Currently doing this on the same line as each comp
+					}
 					"compsCap" {
 						switch($side) {
 							"start" { return "<computers>" }
