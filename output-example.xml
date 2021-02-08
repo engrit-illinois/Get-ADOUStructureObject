@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ou><name>Instructional</name>
+	<computers>
+		<computer><name>engr-is-01</name></computer>
+		<computer><name>engr-is-02</name></computer>
+	</computers>
+	<ous>
+		<ou><name>MEL</name>
+			<computers>
+			</computers>
+			<ous>
+				<ou><name>MEL-101</name>
+					<computers>
+						<computer><name>MEL-101-01</name></computer>
+						<computer><name>MEL-101-02</name></computer>
+					</computers>
+					<ous>
+					</ous>
+				</ou>
+				<ou><name>MEL-201</name>
+					<computers>
+						<computer><name>MEL-201-01</name></computer>
+						<computer><name>MEL-201-02</name></computer>
+					</computers>
+					<ous>
+					</ous>
+				</ou>
+			</ous>
+		</ou>
+		<ou><name>Test OU</name>
+			<computers>
+			</computers>
+			<ous>
+				<ou><name>ImagingTest</name>
+					<computers>
+						<computer><name>engr-is-test01</name></computer>
+						<computer><name>engr-is-test02</name></computer>
+					</computers>
+					<ous>
+					</ous>
+				</ou>
+				<ou><name>Empty OU</name>
+					<computers>
+					</computers>
+					<ous>
+					</ous>
+				</ou>
+			</ous>
+		</ou>
+	</ous>
+</ou>
