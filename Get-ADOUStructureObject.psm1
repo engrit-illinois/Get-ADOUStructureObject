@@ -137,24 +137,25 @@ function Get-ADOUStructureObject {
 	
 	function Export-ChildComps($object, $indent) {
 		
+		if($OUTPUT_FORMAT_CAPS) {
+			$indent1 = $indent + 1
+		}
+		
 		$compsCapStart = Get-ExportFormatted "compsCap" $null "start"
 		Export $compsCapStart $indent
 		
 		foreach($comp in $object.Computers) {
-			if($OUTPUT_FORMAT_CAPS) {
-				$capIndent = $indent + 1
-			}
 			
 			# Combined compCap into comp line
 			#$compCapStart = Get-ExportFormatted "compCap" $null "start"
-			#Export $compCapStart $capIndent
+			#Export $compCapStart $indent1
 			
 			$name = Get-ExportFormatted "comp" $comp.Name
-			#Export $name ($capIndent + 1)
-			Export $name $capIndent
+			#Export $name indent1
+			Export $name $indent1
 			
 			#$compCapEnd = Get-ExportFormatted "compCap" $null "end"
-			#Export $compCapEnd $capIndent
+			#Export $compCapEnd $indent1
 		}
 		
 		$compsCapEnd = Get-ExportFormatted "compsCap" $null "end"
@@ -163,29 +164,30 @@ function Get-ADOUStructureObject {
 	
 	function Export-ChildOus($object, $indent) {
 		
+		if($OUTPUT_FORMAT_CAPS) {
+			$indent1 = $indent + 1
+			$indent2 = $indent + 2
+		}
+		
 		$ousCapStart = Get-ExportFormatted "ousCap" $null "start"
 		Export $ousCapStart $indent
 		
 		foreach($child in $object.Children) {
 			$ouCapstart = Get-ExportFormatted "ouCap" $null "start"
-			Export $ouCapStart $indent
-			
-			if($OUTPUT_FORMAT_CAPS) {
-				$capIndent = $indent + 1
-			}
+			Export $ouCapStart $indent1
 			
 			$name = $child.OU.Name
 			
 			$nameStart = Get-ExportFormatted "ou" $name "start" 
-			Export $nameStart $capIndent ($capIndent + 1)
+			Export $nameStart $indent2
 			
-			Export-Children $child ($capIndent + 1)
+			Export-Children $child $indent2
 			
 			$nameEnd = Get-ExportFormatted "ou" $name "end"
-			Export $nameEnd ($capIndent + 1)
+			Export $nameEnd $indent2
 			
 			$ouCapEnd = Get-ExportFormatted "ouCap" $null "end"
-			Export $ouCapEnd $indent
+			Export $ouCapEnd $indent1
 		}
 		
 		$ousCapEnd = Get-ExportFormatted "ousCap" $null "end"
