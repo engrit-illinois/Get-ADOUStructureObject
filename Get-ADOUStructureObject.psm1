@@ -39,7 +39,7 @@ function Get-ADOUStructureObject {
 	function Export-Structure($object) {
 		$name = $($object.OU.Name)
 		
-		Export "Start OU: $name" $true
+		Export "Start OU: $name" $false
 		
 		Export-Children $object 1
 		
