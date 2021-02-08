@@ -193,10 +193,11 @@ function Get-ADOUStructureObject {
 	
 	function Export-Ou($object, $indent) {
 		
-		$indent1 = $indent
-		if($OUTPUT_FORMAT_CAPS) {
-			$indent1 = $indent + 1
-		}
+		#$indent1 = $indent
+		#if($OUTPUT_FORMAT_CAPS) {
+		#	$indent1 = $indent + 1
+		#}
+		$indent1 = $indent + 1
 		
 		$ouCapstart = Get-ExportFormatted "ouCap" $object.OU.Name "start"
 		Export $ouCapStart $indent
