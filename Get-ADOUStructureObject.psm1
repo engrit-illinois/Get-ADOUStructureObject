@@ -137,6 +137,7 @@ function Get-ADOUStructureObject {
 	
 	function Export-ChildComps($object, $indent) {
 		
+		$indent1 = $indent
 		if($OUTPUT_FORMAT_CAPS) {
 			$indent1 = $indent + 1
 		}
@@ -164,6 +165,8 @@ function Get-ADOUStructureObject {
 	
 	function Export-ChildOus($object, $indent) {
 		
+		$indent1 = $indent
+		$indent2 = $indent
 		if($OUTPUT_FORMAT_CAPS) {
 			$indent1 = $indent + 1
 			$indent2 = $indent + 2
