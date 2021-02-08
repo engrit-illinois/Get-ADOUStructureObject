@@ -93,6 +93,13 @@ function Get-ADOUStructureObject {
 					"ou" { return "<name>$name</name>" }
 					"ouCap" {
 						switch($side) {
+							"start" { return "<ou>" }
+							"end" { return "</ou>" }
+							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
+						}
+					}
+					"ousCap" {
+						switch($side) {
 							"start" { return "<ous>" }
 							"end" { return "</ous>" }
 							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
@@ -139,8 +146,8 @@ function Get-ADOUStructureObject {
 			}
 			
 			# Combined compCap into comp line
-			#$compCapEnd = Get-ExportFormatted "compCap" $null "end"
-			#Export $compCapEnd $capIndent
+			#$compCapStart = Get-ExportFormatted "compCap" $null "start"
+			#Export $compCapStart $capIndent
 			
 			$name = Get-ExportFormatted "comp" $comp.Name
 			#Export $name ($capIndent + 1)
@@ -156,8 +163,8 @@ function Get-ADOUStructureObject {
 	
 	function Export-ChildOus($object, $indent) {
 		
-		$ousCapEnd = Get-ExportFormatted "ousCap" $null "end"
-		Export $ousCapEnd $indent
+		$ousCapStart = Get-ExportFormatted "ousCap" $null "start"
+		Export $ousCapStart $indent
 		
 		foreach($child in $object.Children) {
 			$ouCapstart = Get-ExportFormatted "ouCap" $null "start"
