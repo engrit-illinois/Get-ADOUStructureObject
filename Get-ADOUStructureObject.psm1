@@ -73,9 +73,9 @@ function Get-ADOUStructureObject {
 			$indent = "$indent	"
 		}
 		
-		foreach($ou in $object.Children) {
+		foreach($child in $object.Children) {
 			Export "$($indent)Start OU: $name"
-			Export-Children $object ($depth + 1)
+			Export-Children $child ($depth + 1)
 			Export "$($indent)End OU: $name"
 		}
 	}
