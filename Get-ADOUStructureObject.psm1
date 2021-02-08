@@ -1,11 +1,23 @@
 # By mseng3
 function Get-ADOUStructureObject {
 	param(
+		[Parameter(Position=0,Mandatory=$true)]
 		[string]$OUDN,
+		
 		[string]$OutputFilePath,
-		[string]$OutputFormat = "Human",
+		
+		[ValidateSet("HumanReadable","XML")]
+		[string]$OutputFormat = "HumanReadable",
+		
 		[string]$IndentChar = "	"
 	)
+	
+	$OUTPUT_FORMAT_CAPS = $false
+	if(
+		($OutputFormat -eq "XML")
+	) {
+		$OUTPUT_FORMAT_CAPS = $true
+	}
 	
 	$ous = Get-ADOrganizationalUnit -Filter "*" -SearchBase $OUDN
 	$comps = Get-ADComputer -Filter "*" -SearchBase $OUDN
@@ -40,7 +52,7 @@ function Get-ADOUStructureObject {
 	
 	function Get-ExportFormatted($type, $name, $side) {
 		switch($OutputFormat) {
-			"Human" {
+			"HumanReadable" {
 				switch($type) {
 					"comp" {
 						return $name
@@ -64,7 +76,7 @@ function Get-ADOUStructureObject {
 					"comp" {
 						return "<computer><name>$name</name></computer>"
 					}
-					"compCamp" {
+					"compCap" {
 						switch($side) {
 							"start" { return "<computers>" }
 							"end" { return "</computers>" }
@@ -72,7 +84,7 @@ function Get-ADOUStructureObject {
 						}
 					}
 					"ou" { return "<name>$name</name>" }
-					"compCamp" {
+					"compCap" {
 						switch($side) {
 							"start" { return "<ou>" }
 							"end" { return "</ou>" }
@@ -115,11 +127,11 @@ function Get-ADOUStructureObject {
 		Export $start $indent
 		
 		foreach($comp in $object.Computers) {
-			if($OutputFormat -eq "XML") {
-				$compIndent = $indent + 1
+			if($OUTPUT_FORMAT_CAPS) {
+				$capIndent = $indent + 1
 			}
 			$name = Get-ExportFormatted "comp" $comp.Name
-			Export $name $compIndent
+			Export $name $capIndent
 		}
 		
 		$end = Get-ExportFormatted "compCap" $null "end"
@@ -132,15 +144,19 @@ function Get-ADOUStructureObject {
 			$start = Get-ExportFormatted "ouCap" $null "start"
 			Export $start $indent
 			
+			if($OUTPUT_FORMAT_CAPS) {
+				$capIndent = $indent + 1
+			}
+			
 			$name = $child.OU.Name
 			
 			$nameStart = Get-ExportFormatted "ou" $name "start" 
-			Export $nameStart $indent
+			Export $nameStart $capIndent
 			
-			Export-Children $child ($indent + 1)
+			Export-Children $child ($capIndent + 1)
 			
 			$nameEnd = Get-ExportFormatted "ou" $name "end"
-			Export $nameEnd $indent
+			Export $nameEnd $capIndent
 			
 			$end = Get-ExportFormatted "ouCap" $null "end"
 			Export $end $indent
