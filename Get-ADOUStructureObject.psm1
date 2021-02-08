@@ -121,7 +121,7 @@ function Get-ADOUStructureObject {
 			Default { $string = "Invalid `$OutputFormat!" }
 		}
 		
-		Export $string $false
+		Export $string 0 $false
 	}
 	
 	function Export-Structure($object) {
