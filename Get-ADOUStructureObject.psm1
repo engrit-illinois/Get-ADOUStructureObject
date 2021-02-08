@@ -38,7 +38,7 @@ function Get-ADOUStructureObject {
 		$object | ConvertTo-Json -Depth 3
 	}
 	
-	function Get-ExportFormatted($type, $name, $side="comp") {
+	function Get-ExportFormatted($type, $name="cap", $side="comp") {
 		switch($OutputFormat) {
 			"Human" {
 				switch($type) {
@@ -63,11 +63,17 @@ function Get-ADOUStructureObject {
 						return "<computer><name>$name</name></computer>"
 					}
 					"ou" {
-						switch($side) {
-							"start" { return "<ou><name>$name</name>" }
-							"end" { return "</ou>" }
-							Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
-						}
+						switch($name) {
+							"cap" {
+								switch($side) {
+									"start" { return "<ou>" }
+									"end" { return "</ou>" }
+									Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
+								}
+							}
+							Default {
+								return "<name>$name</name>" }
+							}
 					}
 					Default {
 						return "Invalid `$type sent to Get-ExportFormatted()!"
@@ -106,9 +112,8 @@ function Get-ADOUStructureObject {
 			$indent = "$indent$IndentChar"
 		}
 		
-		if($OutputFormat -eq "XML") {
-			Export "$indent<computers>"
-		}
+		$start = Get-ExportFormatted "comp" $null "start"
+		Export "$indent$start"
 		
 		foreach($comp in $object.Computers) {
 			if($OutputFormat -eq "XML") {
@@ -118,9 +123,8 @@ function Get-ADOUStructureObject {
 			Export "$compIndent$name"
 		}
 		
-		if($OutputFormat -eq "XML") {
-			Export "$indent</computers>"
-		}
+		$end = Get-ExportFormatted "comp" $null "end"
+		Export "$indent$end"
 	}
 	
 	function Export-ChildOus($object, $depth) {
@@ -131,6 +135,9 @@ function Get-ADOUStructureObject {
 		}
 		
 		foreach($child in $object.Children) {
+			$start = Get-ExportFormatted "ou" $null "start"
+			Export "$indent$start"
+			
 			$name = $child.OU.Name
 			$nameStart = Get-ExportFormatted "ou" $name "start" 
 			$nameEnd = Get-ExportFormatted "ou" $name "end"
@@ -138,19 +145,24 @@ function Get-ADOUStructureObject {
 			Export "$($indent)$nameStart"
 			Export-Children $child ($depth + 1)
 			Export "$($indent)$nameEnd"
+			
+			$end = Get-ExportFormatted "ou" $null "end"
+			Export "$indent$end"
 		}
 	}
 	
 	function Export($string, $append=$true) {
-		if(!(Test-Path -PathType leaf -Path $OutputFilePath)) {
-			New-Item -ItemType File -Force -Path $OutputFilePath | Out-Null
-		}
-		
-		if($append) {
-			$string | Out-File $OutputFilePath -Encoding ascii -Append
-		}
-		else {
-			$string | Out-File $OutputFilePath -Encoding ascii
+		if($string -ne $null) {
+			if(!(Test-Path -PathType leaf -Path $OutputFilePath)) {
+				New-Item -ItemType File -Force -Path $OutputFilePath | Out-Null
+			}
+			
+			if($append) {
+				$string | Out-File $OutputFilePath -Encoding ascii -Append
+			}
+			else {
+				$string | Out-File $OutputFilePath -Encoding ascii
+			}
 		}
 	}
 	
