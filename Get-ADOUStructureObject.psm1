@@ -121,11 +121,11 @@ function Get-ADOUStructureObject {
 		$nameStart = Get-ExportFormatted "ou" $name "start" 
 		$nameEnd = Get-ExportFormatted "ou" $name "end"
 		
-		Export $nameStart $false
+		Export $nameStart 0 $false
 		
 		Export-Children $object 1
 		
-		Export $nameEnd
+		Export $nameEnd 0
 	}
 	
 	function Export-Children($object, $indent) {
