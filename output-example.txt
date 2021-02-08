@@ -1,0 +1,23 @@
+Export of "OU=Given OU,DC=ad,DC=uillinois,DC=edu":
+[Given OU]
+	engr-is-01
+	engr-is-02
+	[MEL]
+		[MEL-101]
+			MEL-101-01
+			MEL-101-02
+		End [MEL-101]
+		[MEL-201]
+			MEL-201-01
+			MEL-201-02
+		End [MEL-201]
+	End [MEL]
+	[Test OU]
+		[ImagingTest]
+			engr-is-test01
+			engr-is-test02
+		End [ImagingTest]
+		[Empty OU]
+		End [Empty OU]
+	End [Test OU]
+End [Given OU]

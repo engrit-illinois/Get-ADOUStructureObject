@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ou><name>Instructional</name>
+<ou><name>Given OU</name>
 	<computers>
 		<computer><name>engr-is-01</name></computer>
 		<computer><name>engr-is-02</name></computer>
