@@ -190,7 +190,7 @@ function Get-ADOUStructureObject {
 		$nameStart = Get-ExportFormatted "ou" $object.OU.Name "start"
 		Export $nameStart $indent1
 		
-		Export-Children $child $indent1
+		Export-Children $object $indent1
 		
 		$ouCapEnd = Get-ExportFormatted "ouCap" $null "end"
 		Export $ouCapEnd $indent
