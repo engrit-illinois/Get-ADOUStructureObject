@@ -39,11 +39,11 @@ function Get-ADOUStructureObject {
 	function Export-Structure($object) {
 		$name = $($object.OU.Name)
 		
-		Export "Start OU: $name" $false
+		Export "[$name]" $false
 		
 		Export-Children $object 1
 		
-		Export "End OU: $name"
+		Export "End [$name]"]
 	}
 	
 	function Export-Children($object, $depth) {
@@ -75,9 +75,9 @@ function Get-ADOUStructureObject {
 		
 		foreach($child in $object.Children) {
 			$name = $child.OU.Name
-			Export "$($indent)Start OU: $name"
+			Export "$($indent)[$name]"
 			Export-Children $child ($depth + 1)
-			Export "$($indent)End OU: $name"
+			Export "$($indent)End [$name]"
 		}
 	}
 	
