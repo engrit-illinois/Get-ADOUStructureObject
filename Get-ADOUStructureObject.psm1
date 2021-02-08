@@ -84,7 +84,7 @@ function Get-ADOUStructureObject {
 						}
 					}
 					"ou" { return "<name>$name</name>" }
-					"compCap" {
+					"ouCap" {
 						switch($side) {
 							"start" { return "<ou>" }
 							"end" { return "</ou>" }
