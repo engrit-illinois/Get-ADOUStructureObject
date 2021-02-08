@@ -112,10 +112,10 @@ function Get-ADOUStructureObject {
 		
 		foreach($comp in $object.Computers) {
 			if($OutputFormat -eq "XML") {
-				$indent = "$indent$IndentChar"
+				$compIndent = "$indent$IndentChar"
 			}
 			$name = Get-ExportFormatted "comp" $comp.Name
-			Export "$indent$name"
+			Export "$compIndent$name"
 		}
 		
 		if($OutputFormat -eq "XML") {
