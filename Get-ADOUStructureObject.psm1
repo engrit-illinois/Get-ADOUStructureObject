@@ -200,14 +200,23 @@ function Get-ADOUStructureObject {
 		$indent1 = $indent + 1
 		
 		$ouCapstart = Get-ExportFormatted "ouCap" $object.OU.Name "start"
-		#Export $ouCapStart $indent
-		# Putting the <name> tag on the same line as <ou> for condensed readability
-		# This should have no effect on the "HumanReadable" output
-		Export $ouCapStart $indent $true $true
+		if($OUTPUT_FORMAT_CAPS) {
+			# Putting the <name> tag on the same line as <ou> for condensed readability
+			Export $ouCapStart $indent $true $true
+		}
+		else {
+			Export $ouCapStart $indent
+		}
 		
-		$nameStart = Get-ExportFormatted "ou" $object.OU.Name
-		#Export $nameStart $indent1
-		Export $nameStart 0
+		
+		$name = Get-ExportFormatted "ou" $object.OU.Name
+		if($OUTPUT_FORMAT_CAPS) {
+			# Putting the <name> tag on the same line as <ou> for condensed readability
+			Export $name 0
+		}
+		else {
+			Export $name $indent1
+		}
 		
 		Export-Children $object $indent1
 		
