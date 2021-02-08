@@ -114,11 +114,11 @@ function Get-ADOUStructureObject {
 		Export $nameEnd
 	}
 	
-	function Export-Children($object, $depth) {
+	function Export-Children($object, $indent) {
 			
-		Export-ChildComps $object $depth
+		Export-ChildComps $object $indent
 		
-		Export-ChildOus $object $depth
+		Export-ChildOus $object $indent
 	}
 	
 	function Export-ChildComps($object, $indent) {
