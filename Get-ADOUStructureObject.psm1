@@ -127,7 +127,7 @@ function Get-ADOUStructureObject {
 		
 		$indent = ""
 		for($i = 0; $i -lt $depth; $i += 1) {
-			$indent = "$indentIndentChar"
+			$indent = "$indent$IndentChar"
 		}
 		
 		foreach($child in $object.Children) {
