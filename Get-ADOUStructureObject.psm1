@@ -59,6 +59,7 @@ function Get-ADOUStructureObject {
 					}
 					"compCap" { 
 						# Currently doing this on the same line as each comp
+						return $null
 					}
 					"compsCap" { return $null }
 					"ou" { return $null }
@@ -81,6 +82,7 @@ function Get-ADOUStructureObject {
 					}
 					"compCap" {
 						# Currently doing this on the same line as each comp
+						return $null
 					}
 					"compsCap" {
 						switch($side) {
