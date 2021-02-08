@@ -112,6 +112,18 @@ function Get-ADOUStructureObject {
 		}
 	}
 	
+	function Export-Header {
+		$string = "Invalid `$OutputFormat!"
+		
+		switch($OutputFormat) {
+			"HumanReadable" { $string = "Export of `"$OUDN`":" }
+			"XML" { $string = "<?xml version=`"1.0`" encoding=`"UTF-8`"?>" }
+			Default { $string = "Invalid `$OutputFormat!" }
+		}
+		
+		Export $string $false
+	}
+	
 	function Export-Structure($object) {
 		#$name = $($object.OU.Name)
 		#$nameStart = Get-ExportFormatted "ou" $name "start" 
@@ -121,7 +133,7 @@ function Get-ADOUStructureObject {
 		#Export-Children $object 1
 		#Export $nameEnd 0
 		
-		Export "<?xml version=`"1.0`" encoding=`"UTF-8`"?>" $false
+		Export-Header
 		
 		Export-Ou $object 0
 	}
