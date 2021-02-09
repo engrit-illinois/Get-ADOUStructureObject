@@ -9,7 +9,7 @@ function Get-ADOUStructureObject {
 		[ValidateSet("HumanReadable","XML")]
 		[string]$OutputFormat = "HumanReadable",
 		
-		[string]$IndentChar = "	",
+		[string]$IndentChar = "`t",
 		
 		[switch]$Silent,
 		
