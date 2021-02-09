@@ -47,7 +47,7 @@ function Get-ADOUStructureObject {
 		$comps
 	}
 	
-	function Get-Children($object) {
+	function Get-Children($object, $comps) {
 		$dn = $object.OU.DistinguishedName
 		
 		$children = $ous | Where { $_.DistinguishedName -eq "OU=$($_.Name),$dn" }
@@ -59,7 +59,7 @@ function Get-ADOUStructureObject {
 			$childObject = [PSCustomObject]@{
 				"OU" = $child
 			}
-			$grandChildren = Get-Children $childObject
+			$grandChildren = Get-Children $childObject $comps
 			$childObject | Add-Member -NotePropertyName "Children" -NotePropertyValue $grandChildren
 			
 			$childComps = $comps | Where { $_.DistinguishedName -eq "CN=$($_.Name),$childDn" }
@@ -69,10 +69,6 @@ function Get-ADOUStructureObject {
 		}
 		
 		$childObjects
-	}
-	
-	function Print-Structure($object) {
-		$object | ConvertTo-Json -Depth 3
 	}
 	
 	function Get-ExportFormatted($type, $name, $side) {
@@ -309,7 +305,7 @@ function Get-ADOUStructureObject {
 				"OU" = $ous | Where { $_.DistinguishedName -eq $OUDN }
 			}
 			
-			$children = Get-Children $object
+			$children = Get-Children $object $comps
 			$object | Add-Member -NotePropertyName "Children" -NotePropertyValue $children
 			
 			$dn = $object.OU.DistinguishedName
