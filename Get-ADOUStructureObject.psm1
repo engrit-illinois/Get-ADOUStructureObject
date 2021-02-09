@@ -23,15 +23,28 @@ function Get-ADOUStructureObject {
 		$OUTPUT_FORMAT_CAPS = $true
 	}
 	
-	if($OutputObject) {
-		$ous = Get-ADOrganizationalUnit -Filter "*" -SearchBase $OUDN
-		$comps = Get-ADComputer -Filter "*" -SearchBase $OUDN
+	function Get-Ous {
+		if($OutputObject) {
+			$ous = Get-ADOrganizationalUnit -Filter "*" -SearchBase $OUDN
+		}
+		else {
+			# For optimization if not outputting an object to the pipeline
+			# Because the script actually only needs Name and DistinguishedName to function otherwise
+			$ous = Get-ADOrganizationalUnit -Filter "*" -SearchBase $OUDN -Properties "Name","DistinguishedName" | Select Name,DistinguishedName
+		}
+		$ous
 	}
-	else {
-		# For optimization if not outputting an object to the pipeline
-		# Because the script actually only needs Name and DistinguishedName to function otherwise
-		$ous = Get-ADOrganizationalUnit -Filter "*" -SearchBase $OUDN -Properties "Name","DistinguishedName" | Select Name,DistinguishedName
-		$comps = Get-ADComputer -Filter "*" -SearchBase $OUDN -Properties "Name","DistinguishedName" | Select Name,DistinguishedName
+	
+	function Get-Comps {
+		if($OutputObject) {
+			$comps = Get-ADComputer -Filter "*" -SearchBase $OUDN
+		}
+		else {
+			# For optimization if not outputting an object to the pipeline
+			# Because the script actually only needs Name and DistinguishedName to function otherwise
+			$comps = Get-ADComputer -Filter "*" -SearchBase $OUDN -Properties "Name","DistinguishedName" | Select Name,DistinguishedName
+		}
+		$comps
 	}
 	
 	function Get-Children($object) {
@@ -289,6 +302,9 @@ function Get-ADOUStructureObject {
 			Write-Host "No forms of output were requested. Aborting."
 		}
 		else {
+			$ous = Get-Ous
+			$comps = Get-Comps
+			
 			$object = [PSCustomObject]@{
 				"OU" = $ous | Where { $_.DistinguishedName -eq $OUDN }
 			}
