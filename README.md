@@ -8,7 +8,7 @@ Takes an OU and returns an object containing all data about the OU and it's sub-
 2. Import it as a module: `Import-Module "c:\path\to\Get-ADOUStructure.psm1"`
 3. Run it, e.g.:
   - `Get-ADOUStructureObject "OU=Given OU,OU=Desktops,OU=Engineering,OU=Urbana,DC=ad,DC=uillinois,DC=edu"`
-  - `Get-ADOUStructureObject -OUDN "OU=Given OU,OU=Desktops,OU=Engineering,OU=Urbana,DC=ad,DC=uillinois,DC=edu" -OutputFilePath "c:\engrit\logs\Get-ADOUStructureObejct.xml" -OutputFormat "XML"`
+  - `Get-ADOUStructureObject -OUDN "OU=Given OU,OU=Desktops,OU=Engineering,OU=Urbana,DC=ad,DC=uillinois,DC=edu" -OutputFilePath "c:\ou-structure.xml" -OutputFormat "XML"`
 
 # Parameters
 
