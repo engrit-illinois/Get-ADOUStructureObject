@@ -1,5 +1,5 @@
 # Summary
-Takes an OU and returns an object containing all data about the OU and it's sub-OUs, retaining the OU structure. Optionally outputs structure to a file in simplified or XML format.  
+Takes an OU and prints a visual, textual representation of the OU and it's sub-OUs and computers, retaining the OU structure. Optionally outputs to a file in simplified or XML format. Optionally outputs a Powershell object to the pipeline containing all of the data about all OUs and computers discovered, which also retains the OU structure.  
 
 # Usage
 1. Download `Get-ADOUStructure.psm1`.

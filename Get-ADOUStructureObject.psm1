@@ -23,8 +23,15 @@ function Get-ADOUStructureObject {
 		$OUTPUT_FORMAT_CAPS = $true
 	}
 	
-	$ous = Get-ADOrganizationalUnit -Filter "*" -SearchBase $OUDN
-	$comps = Get-ADComputer -Filter "*" -SearchBase $OUDN
+	if($OutputObject) {
+		$ous = Get-ADOrganizationalUnit -Filter "*" -SearchBase $OUDN
+		$comps = Get-ADComputer -Filter "*" -SearchBase $OUDN
+	}
+	else {
+		# For optimization if not outputting an object to the pipeline
+		$ous = Get-ADOrganizationalUnit -Filter "*" -SearchBase $OUDN -Properties "Name,DistinguishedName" | Select Name,DistinguishedName
+		$comps = Get-ADComputer -Filter "*" -SearchBase $OUDN -Properties "Name,DistinguishedName" | Select Name,DistinguishedName
+	}
 	
 	function Get-Children($object) {
 		$dn = $object.OU.DistinguishedName
