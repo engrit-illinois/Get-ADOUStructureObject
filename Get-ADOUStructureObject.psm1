@@ -31,7 +31,7 @@ function Get-ADOUStructureObject {
 		# For optimization if not outputting an object to the pipeline
 		# Because the script actually only needs Name and DistinguishedName to function otherwise
 		$ous = Get-ADOrganizationalUnit -Filter "*" -SearchBase $OUDN -Properties "Name","DistinguishedName" | Select Name,DistinguishedName
-		$comps = Get-ADComputer -Filter "*" -SearchBase $OUDN -Properties "Name,DistinguishedName" | Select Name,DistinguishedName
+		$comps = Get-ADComputer -Filter "*" -SearchBase $OUDN -Properties "Name","DistinguishedName" | Select Name,DistinguishedName
 	}
 	
 	function Get-Children($object) {
