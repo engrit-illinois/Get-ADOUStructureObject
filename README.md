@@ -10,6 +10,8 @@ Takes an OU and returns an object containing all data about the OU and it's sub-
   - `Get-ADOUStructureObject "OU=Given OU,OU=Desktops,OU=Engineering,OU=Urbana,DC=ad,DC=uillinois,DC=edu"`
   - `Get-ADOUStructureObject -OUDN "OU=Given OU,OU=Desktops,OU=Engineering,OU=Urbana,DC=ad,DC=uillinois,DC=edu" -OutputFilePath "c:\ou-structure.xml" -OutputFormat "XML"`
 
+For a preview of what the output looks like, see [outout-example.txt](output-example.txt) and [output-example.xml](output-example.xml).  
+
 # Parameters
 
 ### -OUDN \<string\>
