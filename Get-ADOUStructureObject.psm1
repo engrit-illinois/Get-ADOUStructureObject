@@ -272,21 +272,31 @@ function Get-ADOUStructureObject {
 	}
 	
 	function Do-Stuff {
-		$object = [PSCustomObject]@{
-			"OU" = $ous | Where { $_.DistinguishedName -eq $OUDN }
+		
+		if(
+			(!$OutputFilePath) -and
+			($Silent) -and
+			(!$OutputObject)
+		) {
+			Write-Host "No forms of output were requested. Aborting."
 		}
-		
-		$children = Get-Children $object
-		$object | Add-Member -NotePropertyName "Children" -NotePropertyValue $children
-		
-		$dn = $object.OU.DistinguishedName
-		$childComps = $comps | Where { $_.DistinguishedName -eq "CN=$($_.Name),$dn" }
-		$object | Add-Member -NotePropertyName "Computers" -NotePropertyValue $childComps
-		
-		Export-Structure $object
-		
-		if($OutputObject) {
-			$object
+		else {
+			$object = [PSCustomObject]@{
+				"OU" = $ous | Where { $_.DistinguishedName -eq $OUDN }
+			}
+			
+			$children = Get-Children $object
+			$object | Add-Member -NotePropertyName "Children" -NotePropertyValue $children
+			
+			$dn = $object.OU.DistinguishedName
+			$childComps = $comps | Where { $_.DistinguishedName -eq "CN=$($_.Name),$dn" }
+			$object | Add-Member -NotePropertyName "Computers" -NotePropertyValue $childComps
+			
+			Export-Structure $object
+			
+			if($OutputObject) {
+				$object
+			}
 		}
 	}
 	
