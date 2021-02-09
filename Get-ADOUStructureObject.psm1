@@ -47,7 +47,7 @@ function Get-ADOUStructureObject {
 		$comps
 	}
 	
-	function Get-Children($object, $comps) {
+	function Get-Children($object) {
 		$dn = $object.OU.DistinguishedName
 		
 		$children = $ous | Where { $_.DistinguishedName -eq "OU=$($_.Name),$dn" }
@@ -59,7 +59,7 @@ function Get-ADOUStructureObject {
 			$childObject = [PSCustomObject]@{
 				"OU" = $child
 			}
-			$grandChildren = Get-Children $childObject $comps
+			$grandChildren = Get-Children $childObject
 			$childObject | Add-Member -NotePropertyName "Children" -NotePropertyValue $grandChildren
 			
 			$childComps = $comps | Where { $_.DistinguishedName -eq "CN=$($_.Name),$childDn" }
@@ -289,23 +289,11 @@ function Get-ADOUStructureObject {
 	}
 	
 	function Do-Stuff {
-		
-		if(
-			(!$OutputFilePath) -and
-			($Silent) -and
-			(!$OutputObject)
-		) {
-			Write-Host "No forms of output were requested. Aborting."
-		}
-		else {
-			$ous = Get-Ous
-			$comps = Get-Comps
-			
 			$object = [PSCustomObject]@{
 				"OU" = $ous | Where { $_.DistinguishedName -eq $OUDN }
 			}
 			
-			$children = Get-Children $object $comps
+			$children = Get-Children $object
 			$object | Add-Member -NotePropertyName "Children" -NotePropertyValue $children
 			
 			$dn = $object.OU.DistinguishedName
@@ -320,5 +308,17 @@ function Get-ADOUStructureObject {
 		}
 	}
 	
-	Do-Stuff
+	if(
+		(!$OutputFilePath) -and
+		($Silent) -and
+		(!$OutputObject)
+	) {
+		Write-Host "No forms of output were requested. Aborting."
+	}
+	else {
+		$ous = Get-Ous
+		$comps = Get-Comps
+	
+		Do-Stuff
+	}
 }
