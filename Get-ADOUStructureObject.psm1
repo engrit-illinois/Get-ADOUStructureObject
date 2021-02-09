@@ -289,22 +289,21 @@ function Get-ADOUStructureObject {
 	}
 	
 	function Do-Stuff {
-			$object = [PSCustomObject]@{
-				"OU" = $ous | Where { $_.DistinguishedName -eq $OUDN }
-			}
-			
-			$children = Get-Children $object
-			$object | Add-Member -NotePropertyName "Children" -NotePropertyValue $children
-			
-			$dn = $object.OU.DistinguishedName
-			$childComps = $comps | Where { $_.DistinguishedName -eq "CN=$($_.Name),$dn" }
-			$object | Add-Member -NotePropertyName "Computers" -NotePropertyValue $childComps
-			
-			Export-Structure $object
-			
-			if($OutputObject) {
-				$object
-			}
+		$object = [PSCustomObject]@{
+			"OU" = $ous | Where { $_.DistinguishedName -eq $OUDN }
+		}
+		
+		$children = Get-Children $object
+		$object | Add-Member -NotePropertyName "Children" -NotePropertyValue $children
+		
+		$dn = $object.OU.DistinguishedName
+		$childComps = $comps | Where { $_.DistinguishedName -eq "CN=$($_.Name),$dn" }
+		$object | Add-Member -NotePropertyName "Computers" -NotePropertyValue $childComps
+		
+		Export-Structure $object
+		
+		if($OutputObject) {
+			$object
 		}
 	}
 	
