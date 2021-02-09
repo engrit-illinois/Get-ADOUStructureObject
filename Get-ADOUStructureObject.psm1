@@ -9,7 +9,9 @@ function Get-ADOUStructureObject {
 		[ValidateSet("HumanReadable","XML")]
 		[string]$OutputFormat = "HumanReadable",
 		
-		[string]$IndentChar = "	"
+		[string]$IndentChar = "	",
+		
+		[switch]$Silent
 	)
 	
 	$OUTPUT_FORMAT_CAPS = $false
@@ -239,7 +241,9 @@ function Get-ADOUStructureObject {
 			$string = "$indent$string"
 			
 			if($nonewline) {
-				$string | Write-Host -NoNewline
+				if(!$Silent) {
+					$string | Write-Host -NoNewline
+				}
 				if($OutputFilePath) {
 					if($append) {
 						$string | Out-File $OutputFilePath -Encoding ascii -Append -NoNewline
@@ -250,7 +254,9 @@ function Get-ADOUStructureObject {
 				}
 			}
 			else {
-				$string | Write-Host
+				if(!$Silent) {
+					$string | Write-Host
+				}
 				if($OutputFilePath) {
 					if($append) {
 						$string | Out-File $OutputFilePath -Encoding ascii -Append
