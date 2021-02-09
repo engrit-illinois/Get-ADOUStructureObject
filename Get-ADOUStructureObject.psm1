@@ -11,7 +11,9 @@ function Get-ADOUStructureObject {
 		
 		[string]$IndentChar = "	",
 		
-		[switch]$Silent
+		[switch]$Silent,
+		
+		[switch]$OutputObject
 	)
 	
 	$OUTPUT_FORMAT_CAPS = $false
@@ -281,10 +283,10 @@ function Get-ADOUStructureObject {
 		$childComps = $comps | Where { $_.DistinguishedName -eq "CN=$($_.Name),$dn" }
 		$object | Add-Member -NotePropertyName "Computers" -NotePropertyValue $childComps
 		
-		#Print-Structure $object
+		Export-Structure $object
 		
-		if($OutputFilePath) {
-			Export-Structure $object
+		if($OutputObject) {
+			$object
 		}
 	}
 	

@@ -36,5 +36,15 @@ Optional string.
 The string to use as a single indentation.  
 Default is a single tab character.  
 
+### -Silent
+Optional switch.  
+If specified, nothing is written to the console.  
+By default, the same output that would be written to a file is also written to the console.  
+For large OUs, this can be somewhat pointless, as it may overrun the console buffer, especially if using a default buffer size.  
+
+### -OutputObject
+Optional switch.  
+If specified, the object which the script uses to store all of the gathered data is output to the pipeline, for you to do with as you see fit.  
+
 # Notes
 - By mseng3. See my other projects here: https://github.com/mmseng/code-compendium.
