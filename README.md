@@ -23,6 +23,7 @@ The format of the output.
 Specifying `HumanReadable` outputs a simplified, custom format, designed for easy readability.  
 Specifying `XML` outputs valid XML, with custom markup tags.  
 Default is `HumanReadable`.  
+Has no effect if `-OutputFilePath` is not specified.  
 
 ### -OutputFilePath \<string\>
 Optional string.  
