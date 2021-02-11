@@ -5,8 +5,8 @@ Takes an OU and prints a visual, textual representation of the OU and it's sub-O
 1. Download `Get-ADOUStructure.psm1`.
 2. Import it as a module: `Import-Module "c:\path\to\Get-ADOUStructure.psm1"`
 3. Run it, e.g.:
-  - `Get-ADOUStructureObject "OU=Given OU,OU=Desktops,OU=Engineering,OU=Urbana,DC=ad,DC=uillinois,DC=edu"`
-  - `Get-ADOUStructureObject -OUDN "OU=Given OU,OU=Desktops,OU=Engineering,OU=Urbana,DC=ad,DC=uillinois,DC=edu" -OutputFilePath "c:\ou-structure.xml" -OutputFormat "XML"`
+    - `Get-ADOUStructureObject "OU=Given OU,OU=Desktops,OU=Engineering,OU=Urbana,DC=ad,DC=uillinois,DC=edu"`
+    - `Get-ADOUStructureObject -OUDN "OU=Given OU,OU=Desktops,OU=Engineering,OU=Urbana,DC=ad,DC=uillinois,DC=edu" -OutputFilePath "c:\ou-structure.xml" -OutputFormat "XML"`
 
 For a preview of what the output looks like, see [output-example.txt](output-example.txt) and [output-example.xml](output-example.xml).  
 
