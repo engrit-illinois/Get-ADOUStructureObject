@@ -2,9 +2,8 @@
 Takes an OU and prints a visual, textual representation of the OU and it's sub-OUs and computers, retaining the OU structure. Optionally outputs to a file in simplified or XML format. Optionally outputs a Powershell object to the pipeline containing all of the data about all OUs and computers discovered, which also retains the OU structure.  
 
 # Usage
-1. Download `Get-ADOUStructure.psm1`.
-2. Import it as a module: `Import-Module "c:\path\to\Get-ADOUStructure.psm1"`
-3. Run it, e.g.:
+1. Download `Get-ADOUStructure.psm1` to `$HOME\Documents\WindowsPowerShell\Modules\Get-ADOUStructure\Get-ADOUStructure.psm1`.
+2. Run it, e.g.:
     - `Get-ADOUStructureObject "OU=Given OU,OU=Desktops,OU=Engineering,OU=Urbana,DC=ad,DC=uillinois,DC=edu"`
     - `Get-ADOUStructureObject -OUDN "OU=Given OU,OU=Desktops,OU=Engineering,OU=Urbana,DC=ad,DC=uillinois,DC=edu" -OutputFilePath "c:\ou-structure.xml" -OutputFormat "XML"`
 
