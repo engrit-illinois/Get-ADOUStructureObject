@@ -9,6 +9,12 @@ function Get-ADOUStructureObject {
 		[ValidateSet("HumanReadable","XML")]
 		[string]$OutputFormat = "HumanReadable",
 		
+		[switch]$OusOnly,
+		
+		[switch]$NoOuEndCap,
+		
+		[switch]$NoOuBrackets,
+		
 		[string]$IndentChar = "`t",
 		
 		[switch]$Silent,
@@ -86,8 +92,14 @@ function Get-ADOUStructureObject {
 					"ou" { return $null }
 					"ouCap" {
 						switch($side) {
-							"start" { return "[$name]" }
-							"end" { return "End [$name]" }
+							"start" {
+								if($NoOuBrackets) { return $name }
+								else { return "[$name]" }
+							}
+							"end" {
+								if($NoOuBrackets) { return "End $name" }
+								else { return "End [$name]" }
+							}
 							Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
 						}
 					}
@@ -161,7 +173,9 @@ function Get-ADOUStructureObject {
 	
 	function Export-Children($object, $indent) {
 			
-		Export-ChildComps $object $indent
+		if(-not $OusOnly) {
+			Export-ChildComps $object $indent
+		}
 		
 		Export-ChildOus $object $indent
 	}
@@ -241,8 +255,15 @@ function Get-ADOUStructureObject {
 		
 		Export-Children $object $indent1
 		
-		$ouCapEnd = Get-ExportFormatted "ouCap" $object.OU.Name "end"
-		Export $ouCapEnd $indent
+		if(
+			-not(
+				($OutputFormat -eq "HumanReadable" ) -and
+				($NoOuEndCap)
+			)
+		) {
+			$ouCapEnd = Get-ExportFormatted "ouCap" $object.OU.Name "end"
+			Export $ouCapEnd $indent
+		}
 	}
 	
 	function Export($string, $indentSize=0, $append=$true, $nonewline=$false) {

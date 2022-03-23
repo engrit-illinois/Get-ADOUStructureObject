@@ -24,6 +24,23 @@ Specifying `XML` outputs valid XML, with custom markup tags.
 Default is `HumanReadable`.  
 Has no effect if `-OutputFilePath` is not specified.  
 
+### -OusOnly
+Optional switch.  
+By default the output includes child computer objects.  
+If specified, the output will omit child computers, and will contain only OUs.  
+
+### -NoOuEndCap
+Optional switch.  
+By default, regardless of the value of `-OutputFormat`, the output includes "end caps" (i.e. closing tags) for OUs, to denote where they end after their list of child computer objects.  
+If specified, and `-OutputFormat` is specified as `HumanReadable`, the output will omit the OU "end caps".  
+Has no effect if `-OutputFormat` is not specified as `HumanReadable`, as closing tags are required for XML syntax.  
+
+### -NoOuBrackets
+Optional switch.  
+By default, if `-OutputFormat` is specified as `HumanReadable`, the output includes square brackets around OU names, to differentiate them from child computer objects.  
+If specified, and `-OutputFormat` is specified as `HumanReadable`, the output will omit the square brackets.  
+Has no effect if `-OutputFormat` is not specified as `HumanReadable`, as square brackets are not used in the XML syntax.  
+
 ### -OutputFilePath \<string\>
 Optional string.  
 The full file path to the output file.  
