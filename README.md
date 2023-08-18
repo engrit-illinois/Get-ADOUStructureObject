@@ -24,10 +24,10 @@ Specifying `XML` outputs valid XML, with custom markup tags. See `output-example
 Default is `HumanReadable`.  
 Has no effect if `-OutputFilePath` is not specified.  
 
-### -OusOnly
+### -IncludeComputers
 Optional switch.  
-By default the output includes child computer objects.  
-If specified, the output will omit child computers, and will contain only OUs.  
+By default the output includes only the OU structure.  
+If specified, the output will include child computers as well.  
 
 ### -NoOuEndCap
 Optional switch.  
