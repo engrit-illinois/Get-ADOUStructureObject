@@ -9,7 +9,7 @@ function Get-ADOUStructureObject {
 		[ValidateSet("HumanReadable","XML")]
 		[string]$OutputFormat = "HumanReadable",
 		
-		[switch]$OusOnly,
+		[switch]$IncludeComputers,
 		
 		[switch]$NoOuEndCap,
 		
@@ -173,7 +173,7 @@ function Get-ADOUStructureObject {
 	
 	function Export-Children($object, $indent) {
 			
-		if(-not $OusOnly) {
+		if($IncludeComputers) {
 			Export-ChildComps $object $indent
 		}
 		
