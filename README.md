@@ -55,7 +55,7 @@ Default is a single tab character.
 Optional switch.  
 If specified, nothing is written to the console.  
 By default, the same output that would be written to a file is also written to the console.  
-For large OUs, this can be somewhat pointless, as it may overrun the console buffer, especially if using a default buffer size.  
+For large OUs, the default output behavior can be somewhat pointless, as it may overrun the console buffer, especially if using a default buffer size.  
 
 ### -OutputObject
 Optional switch.  
