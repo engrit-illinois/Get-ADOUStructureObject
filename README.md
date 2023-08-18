@@ -19,8 +19,8 @@ The switch itself may be omitted if given as the first argument.
 ### -OutputFormat ["HumanReadable" | "XML"]
 Optional string from a set of predefined strings.  
 The format of the output.  
-Specifying `HumanReadable` outputs a simplified, custom format, designed for easy readability.  
-Specifying `XML` outputs valid XML, with custom markup tags.  
+Specifying `HumanReadable` outputs a simplified, custom format, designed for easy readability. See `output-example.txt` for an example.  
+Specifying `XML` outputs valid XML, with custom markup tags. See `output-example.xml` for an example.  
 Default is `HumanReadable`.  
 Has no effect if `-OutputFilePath` is not specified.  
 
