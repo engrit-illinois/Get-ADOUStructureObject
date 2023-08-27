@@ -26,7 +26,7 @@ OU structure + computer objects + GPOs + GPO inheritance:
 `Get-ADOUStructureObject $oudn -IncludeComputers -IncludeGpos -IncludeGpoInheritance`  
 
 Output everything to a file in XML format:  
-`Get-ADOUStructureObject $oudn -IncludeComputers -IncludeGpos -IncludeGpoInheritance -OutpuFilePath "c:\engrit\logs\ou-structure.xml"`  
+`Get-ADOUStructureObject $oudn -IncludeComputers -IncludeGpos -IncludeGpoInheritance -OutpuFilePath "c:\ou-structure.xml"`  
 
 ### Simplified format examples
 
@@ -43,7 +43,7 @@ OU structure + computer objects + GPOs + GPO inheritance:
 `Get-ADOUStructureObject $oudn -OutputFormat "Simplified" -IncludeComputers -IncludeGpos -IncludeGpoInheritance`  
 
 Output everything to a file in simplified format:  
-`Get-ADOUStructureObject $oudn -OutputFormat "Simplified" -IncludeComputers -IncludeGpos -IncludeGpoInheritance -OutpuFilePath "c:\engrit\logs\ou-structure.txt"`  
+`Get-ADOUStructureObject $oudn -OutputFormat "Simplified" -IncludeComputers -IncludeGpos -IncludeGpoInheritance -OutpuFilePath "c:\ou-structure.txt"`  
 
 # Parameters
 
