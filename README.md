@@ -54,7 +54,7 @@ If specified, the output will additionally include representations of child comp
 
 ### -IncludeGpos
 Optional switch.  
-If specified, the output will additionally include representations of GPOs linked to the target OU(s).  
+If specified, the output will additionally include representations of GPOs linked to the target OU(s), the state of GPO inheritance blocking for the target OU(s), and GPOs inherited from above the given parent OU.  
 
 ### -NoOuEndCap
 Optional switch.  
