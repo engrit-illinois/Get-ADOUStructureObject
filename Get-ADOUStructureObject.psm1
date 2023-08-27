@@ -45,11 +45,6 @@ function Get-ADOUStructureObject {
 		$ous
 	}
 	
-	function Get-GPOs {
-		
-		$gpos
-	}
-	
 	function Get-Comps {
 		if($PassThru) {
 			$comps = Get-ADComputer -Filter "*" -SearchBase $OUDN
@@ -221,6 +216,10 @@ function Get-ADOUStructureObject {
 	
 	function Get-GpoInheritance($object) {
 		$dn = $object.OU.DistinguishedName
+		
+		# Workaround for a bug in Get-GpInheritance in PowerShell 7
+		# https://techcommunity.microsoft.com/t5/windows-powershell/using-get-gpinheritance-command-in-powershell-7/m-p/2061936
+		Import-Module -Name "GroupPolicy" -Force -SkipEditionCheck
 		
 		$gpoInheritance = Get-GpInheritance -Target $dn
 		$object | Add-Member -NotePropertyName "GpoInheritance" -NotePropertyValue $gpoInheritance
