@@ -51,6 +51,7 @@ When using `Simplified` format, the following syntax is used to denote different
   - `~Inherted GPO Name~`
   - `<Linked GPO Name>`
   - `computer-name` (i.e. no special characters)
+
 Default is `XML`.  
 
 ### -IncludeComputers
