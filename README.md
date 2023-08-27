@@ -11,7 +11,7 @@ For brevity and clarity, the examples below use the `$oudn` variable to represen
 
 Some pre-generated previews are provided in [output-example.txt](output-example.txt) and [output-example.xml](output-example.xml).  
 
-### HumanReadable format examples
+### XML format examples
 
 OU structure only:  
 `Get-ADOUStructureObject $oudn`  
@@ -22,16 +22,16 @@ OU structure + computer objects:
 OU structure + computer objects + GPOs:  
 `Get-ADOUStructureObject $oudn` -IncludeComputers -IncludeGpos
 
-### XML format examples
+### Simplified format examples
 
 OU structure only:  
-`Get-ADOUStructureObject $oudn -OutputFormat "XML"`  
+`Get-ADOUStructureObject $oudn -OutputFormat "Simplified"`  
 
 OU structure + computer objects:  
-`Get-ADOUStructureObject $oudn -OutputFormat "XML"` -IncludeComputers
+`Get-ADOUStructureObject $oudn -OutputFormat "Simplified"` -IncludeComputers
 
 OU structure + computer objects + GPOs:  
-`Get-ADOUStructureObject $oudn -OutputFormat "XML"` -IncludeComputers -IncludeGpos
+`Get-ADOUStructureObject $oudn -OutputFormat "Simplified"` -IncludeComputers -IncludeGpos
 
 # Parameters
 
@@ -40,13 +40,18 @@ Required string.
 The DistinguishedName of the OU to output.  
 The switch itself may be omitted if given as the first argument.  
 
-### -OutputFormat ["HumanReadable" | "XML"]
+### -OutputFormat ["XML" | "Simplified"]
 Optional string from a set of predefined strings.  
 The format of the output.  
-Specifying `HumanReadable` outputs a simplified, custom format, designed for easy readability. See `output-example.txt` for an example.  
 Specifying `XML` outputs valid XML, with custom markup tags. See `output-example.xml` for an example.  
-Default is `HumanReadable`.  
-Has no effect if `-OutputFilePath` is not specified.  
+Specifying `Simplified` outputs a simplified, custom format, designed for easier readability. See `output-example.txt` for an example.  
+When using `Simplified` format, the following syntax is used to denote different types of objects:
+  - `[GPO Name]`
+  - `*gpoInheritanceBlocked=<True|False>*`
+  - `~Inherted GPO Name~`
+  - `<Linked GPO Name>`
+  - `computer-name` (i.e. no special characters)
+Default is `XML`.  
 
 ### -IncludeComputers
 Optional switch.  

@@ -6,12 +6,14 @@ function Get-ADOUStructureObject {
 		
 		[string]$OutputFilePath,
 		
-		[ValidateSet("HumanReadable","XML")]
-		[string]$OutputFormat = "HumanReadable",
+		[ValidateSet("XML","Simplified")]
+		[string]$OutputFormat = "XML",
 		
-		[switch]$IncludeComputers,
+		[switch]$IncludeGpoInheritance,
 		
 		[switch]$IncludeGpos,
+		
+		[switch]$IncludeComputers,
 		
 		[switch]$NoOuEndCap,
 		
@@ -32,6 +34,17 @@ function Get-ADOUStructureObject {
 	) {
 		$OUTPUT_FORMAT_CAPS = $true
 	}
+	
+	$SIMP_OU_START = "["
+	$SIMP_OU_END = "]"
+	$SIMP_INHBLK_START = "*"
+	$SIMP_INHBLK_END = "*"
+	$SIMP_INHGPO_START = "~"
+	$SIMP_INHGPO_END = "~"
+	$SIMP_GPO_START = "<"
+	$SIMP_GPO_END = ">"
+	$SIMP_COMP_START = ""
+	$SIMP_COMP_END = ""
 	
 	function count($array) {
 		$count = 0
@@ -92,45 +105,8 @@ function Get-ADOUStructureObject {
 		$childObjects
 	}
 	
-	function Get-ExportFormatted($type, $data, $side) {
+	function Get-ExportFormatted($type, $data, $side, $inherited) {
 		switch($OutputFormat) {
-			"HumanReadable" {
-				switch($type) {
-					"gposCap" { return $null }
-					"gpoCap" { return $null }
-					"gpoName" {
-						if($NoGpoBrackets) { return $data }
-						else { return "<$data>" }
-					}
-					"gpoId" { return $null }
-					"gpoEnabled" { return $null }
-					"gpoEnforced" { return $null }
-					"gpoOrder" { return $null }
-					
-					"compsCap" { return $null }
-					"compCap" { return $null }
-					"compName" { return $data }
-					
-					"ousCap" { return $null }
-					"ouCap" {
-						switch($side) {
-							"start" {
-								if($NoOuBrackets) { return $data }
-								else { return "[$data]" }
-							}
-							"end" {
-								if($NoOuBrackets) { return "End $data" }
-								else { return "End [$data]" }
-							}
-							Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
-						}
-					}
-					"ouName" { return $null }
-					"ouGpoInheritanceBlocked" { return $null }
-					
-					Default { return "Invalid `$type sent to Get-ExportFormatted()!" }
-				}
-			}
 			"XML" {
 				switch($type) {
 					"gposCap" {
@@ -211,6 +187,50 @@ function Get-ADOUStructureObject {
 					Default { return "Invalid `$type sent to Get-ExportFormatted()!" }
 				}
 			}
+			"Simplified" {
+				switch($type) {
+					"gposCap" { return $null }
+					"gpoCap" { return $null }
+					"gpoName" {
+						if($NoGpoBrackets) { return $data }
+						else {
+							if($inherited) { return "$($SIMP_INHGPO_START)$data$($SIMP_INHGPO_END)" }
+							else { return "$($SIMP_GPO_START)$data$($SIMP_GPO_END)" }
+						}
+					}
+					"gpoId" { return $null }
+					"gpoEnabled" { return $null }
+					"gpoEnforced" { return $null }
+					"gpoOrder" { return $null }
+					
+					"compsCap" { return $null }
+					"compCap" { return $null }
+					"compName" { return $data }
+					
+					"ousCap" { return $null }
+					"ouCap" {
+						switch($side) {
+							"start" {
+								if($NoOuBrackets) { return $data }
+								else { return "$($SIMP_OU_START)$data$($SIMP_OU_END)" }
+							}
+							"end" {
+								if($NoOuBrackets) { return "End $data" }
+								else { return "End $($SIMP_OU_START)$data$($SIMP_OU_END)" }
+							}
+							Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
+						}
+					}
+					"ouName" { return $null }
+					
+					"gpoInheritanceCap" { return $null}
+					"gpoInheritanceBlocked" { return "$($SIMP_INHBLK_START)gpoInheritanceBlocked=$data$($SIMP_INHBLK_END)" }
+					"gpoInheritanceGposCap" { return $null }
+					"gpoInheritanceGpoCap" { return $null }
+					
+					Default { return "Invalid `$type sent to Get-ExportFormatted()!" }
+				}
+			}
 			Default {
 				return "Invalid `$OutputFormat!"
 			}
@@ -221,7 +241,7 @@ function Get-ADOUStructureObject {
 		$string = "Invalid `$OutputFormat!"
 		
 		switch($OutputFormat) {
-			"HumanReadable" { $string = "Export of `"$OUDN`":" }
+			"Simplified" { $string = "Export of `"$OUDN`":" }
 			"XML" { $string = "<?xml version=`"1.0`" encoding=`"UTF-8`"?>" }
 			Default { $string = "Invalid `$OutputFormat!" }
 		}
@@ -235,6 +255,14 @@ function Get-ADOUStructureObject {
 	}
 	
 	function Export-Children($object, $indent) {
+		
+		if($IncludeGpoInheritance -or $IncludeGpos) {
+			$object = Get-GpoInheritance $object
+		}
+		
+		if($IncludeGpoInheritance) {
+			Export-GpoInheritance $object $indent1
+		}
 		
 		if($IncludeGpos) {
 			Export-Gpos $object $indent
@@ -286,7 +314,7 @@ function Get-ADOUStructureObject {
 				$gpo = $_
 				
 				$gpoCapStart = Get-ExportFormatted "gpoCap" $null "start"
-				$gpoName = Get-ExportFormatted "gpoName" $gpo.DisplayName
+				$gpoName = Get-ExportFormatted "gpoName" $gpo.DisplayName $null $inherited
 				$gpoEnabled = Get-ExportFormatted "gpoEnabled" $gpo.Enabled
 				$gpoEnforced = Get-ExportFormatted "gpoEnforced" $gpo.Enforced
 				$gpoOrder = Get-ExportFormatted "gpoOrder" $gpo.Order
@@ -360,7 +388,11 @@ function Get-ADOUStructureObject {
 	}
 	
 	function Export-GpoInheritance($object, $indent) {
-		$indent1 = $indent + 1
+		
+		$indent1 = $indent
+		if($OUTPUT_FORMAT_CAPS) {
+			$indent1 = $indent + 1
+		}
 		
 		$gpoInheritanceStart = Get-ExportFormatted "gpoInheritanceCap" $null "start"
 		Export $gpoInheritanceStart $indent
@@ -391,14 +423,11 @@ function Get-ADOUStructureObject {
 		$ouName = Get-ExportFormatted "ouName" $object.OU.Name
 		Export $ouName $indent1
 		
-		$object = Get-GpoInheritance $object
-		Export-GpoInheritance $object $indent1
-		
 		Export-Children $object $indent1
 		
 		if(
 			-not(
-				($OutputFormat -eq "HumanReadable" ) -and
+				($OutputFormat -eq "Simplified" ) -and
 				($NoOuEndCap)
 			)
 		) {
