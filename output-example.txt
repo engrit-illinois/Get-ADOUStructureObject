@@ -1,23 +1,45 @@
-Export of "OU=Given OU,DC=ad,DC=uillinois,DC=edu":
-[Given OU]
+Export of "OU=export-test-ou,OU=mseng3,OU=Staff Desktops,OU=NoInheritance,OU=Instructional,OU=Desktops,OU=Engineering,OU=Urbana,DC=ad,DC=uillinois,DC=edu":
+[export-test-ou]
+	*gpoInheritanceBlocked=True*
+	~CITES Lync client policy~
+	~ENGR General Computer Security~
+	~ENGR Remote Assistance~
+	~ENGR US Administrators~
+	~ENGR SCCM Firewall Settings~
+	~ENGR Disable Unsigned Macros~
+	~ENGR EWS PowerShell Remote Settings~
+	~ENGR Remote Administration WinRM~
+	~ENGR Remote Administration Computer Management~
+	<ENGR EWS 30min Idle Logoff>
+	<ENGR EWS Disable Shutdown>
 	engr-is-01
 	engr-is-02
 	[MEL]
+		*gpoInheritanceBlocked=False*
+		<ENGR EWS Printer EWS MEL-1001-BWD1>
 		[MEL-101]
+			*gpoInheritanceBlocked=False*
 			MEL-101-01
 			MEL-101-02
 		End [MEL-101]
 		[MEL-201]
+			*gpoInheritanceBlocked=False*
 			MEL-201-01
 			MEL-201-02
 		End [MEL-201]
 	End [MEL]
 	[Test OU]
+		*gpoInheritanceBlocked=False*
+		<ENGR EWS Disable Box Startup>
+		[Empty OU]
+			*gpoInheritanceBlocked=False*
+			<ENGR EWS Enable Shutdown>
+		End [Empty OU]
 		[ImagingTest]
+			*gpoInheritanceBlocked=False*
+			<ENGR EWS Enable Shutdown>
 			engr-is-test01
 			engr-is-test02
 		End [ImagingTest]
-		[Empty OU]
-		End [Empty OU]
 	End [Test OU]
-End [Given OU]
+End [export-test-ou]

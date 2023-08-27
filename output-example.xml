@@ -1,49 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ou><name>Given OU</name>
+<ou>
+	<name>export-test-ou</name>
+	<gpoInheritance>
+		<gpoInheritanceBlocked>True</gpoInheritanceBlocked>
+		<inheritedGpos>
+			<gpo><name>CITES Lync client policy</name><enabled>True</enabled><enforced>True</enforced><order>1</order><id>b992e807-6ea6-4f24-a0a8-4e97165dbeaf</id></gpo>
+			<gpo><name>ENGR General Computer Security</name><enabled>True</enabled><enforced>True</enforced><order>8</order><id>1b228127-ff87-4f47-a669-c4ab4055493b</id></gpo>
+			<gpo><name>ENGR Remote Assistance</name><enabled>True</enabled><enforced>True</enforced><order>10</order><id>f3d44159-e38f-42ba-a652-f7bdadaec282</id></gpo>
+			<gpo><name>ENGR US Administrators</name><enabled>True</enabled><enforced>True</enforced><order>12</order><id>2225a9ad-30a3-499c-be6f-9c4cf3408b66</id></gpo>
+			<gpo><name>ENGR SCCM Firewall Settings</name><enabled>True</enabled><enforced>True</enforced><order>13</order><id>6c01b529-94fc-4093-b00e-ddba879f13b8</id></gpo>
+			<gpo><name>ENGR Disable Unsigned Macros</name><enabled>True</enabled><enforced>True</enforced><order>14</order><id>d0bb1ee1-a72a-43fc-a161-fbd7df8dae3e</id></gpo>
+			<gpo><name>ENGR EWS PowerShell Remote Settings</name><enabled>True</enabled><enforced>True</enforced><order>7</order><id>1ac09b1d-2949-4103-924f-055d30c978ad</id></gpo>
+			<gpo><name>ENGR Remote Administration WinRM</name><enabled>True</enabled><enforced>True</enforced><order>11</order><id>906b31a1-1884-4c17-9cb2-65b49827819f</id></gpo>
+			<gpo><name>ENGR Remote Administration Computer Management</name><enabled>True</enabled><enforced>True</enforced><order>12</order><id>6306d071-b479-438e-8e90-3a60cb00cce7</id></gpo>
+		</inheritedGpos>
+	</gpoInheritance>
+	<gpos>
+		<gpo><name>ENGR EWS 30min Idle Logoff</name><enabled>True</enabled><enforced>False</enforced><order>1</order><id>072f4f15-7b51-4dc6-a2e4-efa39bdd6b6a</id></gpo>
+		<gpo><name>ENGR EWS Disable Shutdown</name><enabled>True</enabled><enforced>False</enforced><order>2</order><id>b48c1085-806d-4b7c-abb6-2b4cdc9e9922</id></gpo>
+	</gpos>
 	<computers>
 		<computer><name>engr-is-01</name></computer>
 		<computer><name>engr-is-02</name></computer>
 	</computers>
 	<ous>
-		<ou><name>MEL</name>
-			<computers>
-			</computers>
+		<ou>
+			<name>MEL</name>
+			<gpoInheritance>
+				<gpoInheritanceBlocked>False</gpoInheritanceBlocked>
+			</gpoInheritance>
+			<gpos>
+				<gpo><name>ENGR EWS Printer EWS MEL-1001-BWD1</name><enabled>True</enabled><enforced>False</enforced><order>1</order><id>f0fac4ca-54a8-47ab-99c3-cf609ba2922b</id></gpo>
+			</gpos>
+			<computers></computers>
 			<ous>
-				<ou><name>MEL-101</name>
+				<ou>
+					<name>MEL-101</name>
+					<gpoInheritance>
+						<gpoInheritanceBlocked>False</gpoInheritanceBlocked>
+					</gpoInheritance>
+					<gpos></gpos>
 					<computers>
 						<computer><name>MEL-101-01</name></computer>
 						<computer><name>MEL-101-02</name></computer>
 					</computers>
-					<ous>
-					</ous>
+					<ous></ous>
 				</ou>
-				<ou><name>MEL-201</name>
+				<ou>
+					<name>MEL-201</name>
+					<gpoInheritance>
+						<gpoInheritanceBlocked>False</gpoInheritanceBlocked>
+					</gpoInheritance>
+					<gpos></gpos>
 					<computers>
 						<computer><name>MEL-201-01</name></computer>
 						<computer><name>MEL-201-02</name></computer>
 					</computers>
-					<ous>
-					</ous>
+					<ous></ous>
 				</ou>
 			</ous>
 		</ou>
-		<ou><name>Test OU</name>
-			<computers>
-			</computers>
+		<ou>
+			<name>Test OU</name>
+			<gpoInheritance>
+				<gpoInheritanceBlocked>False</gpoInheritanceBlocked>
+			</gpoInheritance>
+			<gpos>
+				<gpo><name>ENGR EWS Disable Box Startup</name><enabled>True</enabled><enforced>False</enforced><order>1</order><id>98fced03-9f4b-480a-a286-7527af0327ba</id></gpo>
+			</gpos>
+			<computers></computers>
 			<ous>
-				<ou><name>ImagingTest</name>
+				<ou>
+					<name>Empty OU</name>
+					<gpoInheritance>
+						<gpoInheritanceBlocked>False</gpoInheritanceBlocked>
+					</gpoInheritance>
+					<gpos>
+						<gpo><name>ENGR EWS Enable Shutdown</name><enabled>False</enabled><enforced>False</enforced><order>1</order><id>5d22e3be-a02b-4601-bfc1-7accc590178b</id></gpo>
+					</gpos>
+					<computers></computers>
+					<ous></ous>
+				</ou>
+				<ou>
+					<name>ImagingTest</name>
+					<gpoInheritance>
+						<gpoInheritanceBlocked>False</gpoInheritanceBlocked>
+					</gpoInheritance>
+					<gpos>
+						<gpo><name>ENGR EWS Enable Shutdown</name><enabled>True</enabled><enforced>False</enforced><order>1</order><id>5d22e3be-a02b-4601-bfc1-7accc590178b</id></gpo>
+					</gpos>
 					<computers>
 						<computer><name>engr-is-test01</name></computer>
 						<computer><name>engr-is-test02</name></computer>
 					</computers>
-					<ous>
-					</ous>
-				</ou>
-				<ou><name>Empty OU</name>
-					<computers>
-					</computers>
-					<ous>
-					</ous>
+					<ous></ous>
 				</ou>
 			</ous>
 		</ou>
