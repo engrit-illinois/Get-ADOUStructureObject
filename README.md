@@ -45,6 +45,13 @@ OU structure + computer objects + GPOs + GPO inheritance:
 Output everything to a file in simplified format:  
 `Get-ADOUStructureObject $oudn -OutputFormat "Simplified" -IncludeComputers -IncludeGpos -IncludeGpoInheritance -OutpuFilePath "c:\ou-structure.txt"`  
 
+### Dump entire Instruction OU to an XML file
+```powershell
+$oudn = "OU=Instructional,OU=Desktops,OU=Engineering,OU=Urbana,DC=ad,DC=uillinois,DC=edu"
+$ts = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
+Get-ADOUStructureObject $oudn -IncludeComputers -IncludeGpos -IncludeGpoInheritance -Silent -OutputFilePath "c:\engrit\ews\Instructional-OU-Export_$($ts).xml"
+```
+
 # Parameters
 
 ### -OUDN \<string\>

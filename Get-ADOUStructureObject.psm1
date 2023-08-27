@@ -299,6 +299,8 @@ function Get-ADOUStructureObject {
 		$gposCap = "gposCap"
 		if($inherited) {
 			$gpos = $object.GpoInheritance.InheritedGpoLinks
+			# Remove GPOs that are directly linked to the given OU, as these are redundant
+			$gpos = $gpos | Where { $_.Target -ne $OUDN }
 			$gposCap = "gpoInheritanceGposCap"
 		}
 		
