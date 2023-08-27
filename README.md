@@ -17,10 +17,16 @@ OU structure only:
 `Get-ADOUStructureObject $oudn`  
 
 OU structure + computer objects:  
-`Get-ADOUStructureObject $oudn` -IncludeComputers
+`Get-ADOUStructureObject $oudn -IncludeComputers`  
 
 OU structure + computer objects + GPOs:  
-`Get-ADOUStructureObject $oudn` -IncludeComputers -IncludeGpos
+`Get-ADOUStructureObject $oudn -IncludeComputers -IncludeGpos`  
+
+OU structure + computer objects + GPOs + GPO inheritance:  
+`Get-ADOUStructureObject $oudn -IncludeComputers -IncludeGpos -IncludeGpoInheritance`  
+
+Output everything to a file in XML format:  
+`Get-ADOUStructureObject $oudn -IncludeComputers -IncludeGpos -IncludeGpoInheritance -OutpuFilePath "c:\engrit\logs\ou-structure.xml"`  
 
 ### Simplified format examples
 
@@ -28,10 +34,16 @@ OU structure only:
 `Get-ADOUStructureObject $oudn -OutputFormat "Simplified"`  
 
 OU structure + computer objects:  
-`Get-ADOUStructureObject $oudn -OutputFormat "Simplified"` -IncludeComputers
+`Get-ADOUStructureObject $oudn -OutputFormat "Simplified" -IncludeComputers`  
 
 OU structure + computer objects + GPOs:  
-`Get-ADOUStructureObject $oudn -OutputFormat "Simplified"` -IncludeComputers -IncludeGpos
+`Get-ADOUStructureObject $oudn -OutputFormat "Simplified" -IncludeComputers -IncludeGpos`  
+
+OU structure + computer objects + GPOs + GPO inheritance:  
+`Get-ADOUStructureObject $oudn -OutputFormat "Simplified" -IncludeComputers -IncludeGpos -IncludeGpoInheritance`  
+
+Output everything to a file in simplified format:  
+`Get-ADOUStructureObject $oudn -OutputFormat "Simplified" -IncludeComputers -IncludeGpos -IncludeGpoInheritance -OutpuFilePath "c:\engrit\logs\ou-structure.txt"`  
 
 # Parameters
 
@@ -60,7 +72,11 @@ If specified, the output will additionally include representations of child comp
 
 ### -IncludeGpos
 Optional switch.  
-If specified, the output will additionally include representations of GPOs linked to the target OU(s), the state of GPO inheritance blocking for the target OU(s), and GPOs inherited from above the given parent OU.  
+If specified, the output will additionally include representations of GPOs directly linked to the target OU(s).  
+
+### -IncludeGpoInheritance
+Optional switch.  
+If specified, the output will additionally include representations of the state of GPO inheritance blocking for the target OU(s), and GPO links inherited from above the given parent OU.  
 
 ### -NoOuEndCap
 Optional switch.  
