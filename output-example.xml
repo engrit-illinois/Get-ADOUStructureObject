@@ -20,8 +20,8 @@
 		<gpo><name>ENGR EWS Disable Shutdown</name><enabled>True</enabled><enforced>False</enforced><order>2</order><id>b48c1085-806d-4b7c-abb6-2b4cdc9e9922</id></gpo>
 	</gpos>
 	<computers>
-		<computer><name>engr-is-01</name></computer>
-		<computer><name>engr-is-02</name></computer>
+		<computer><name>engr-is-01</name><enabled>True</enabled><description>Dummy computer object for AD data export testing.</description></computer>
+		<computer><name>engr-is-02</name><enabled>True</enabled><description>Dummy computer object for AD data export testing.</description></computer>
 	</computers>
 	<ous>
 		<ou>
@@ -41,8 +41,8 @@
 					</gpoInheritance>
 					<gpos></gpos>
 					<computers>
-						<computer><name>MEL-101-01</name></computer>
-						<computer><name>MEL-101-02</name></computer>
+						<computer><name>MEL-101-01</name><enabled>True</enabled><description>Dummy computer object for AD data export testing.</description></computer>
+						<computer><name>MEL-101-02</name><enabled>True</enabled><description>Dummy computer object for AD data export testing.</description></computer>
 					</computers>
 					<ous></ous>
 				</ou>
@@ -53,8 +53,8 @@
 					</gpoInheritance>
 					<gpos></gpos>
 					<computers>
-						<computer><name>MEL-201-01</name></computer>
-						<computer><name>MEL-201-02</name></computer>
+						<computer><name>MEL-201-01</name><enabled>True</enabled><description>Dummy computer object for AD data export testing.</description></computer>
+						<computer><name>MEL-201-02</name><enabled>True</enabled><description>Dummy computer object for AD data export testing.</description></computer>
 					</computers>
 					<ous></ous>
 				</ou>
@@ -90,8 +90,8 @@
 						<gpo><name>ENGR EWS Enable Shutdown</name><enabled>True</enabled><enforced>False</enforced><order>1</order><id>5d22e3be-a02b-4601-bfc1-7accc590178b</id></gpo>
 					</gpos>
 					<computers>
-						<computer><name>engr-is-test01</name></computer>
-						<computer><name>engr-is-test02</name></computer>
+						<computer><name>engr-is-test01</name><enabled>True</enabled><description>Dummy computer object for AD data export testing.</description></computer>
+						<computer><name>engr-is-test02</name><enabled>True</enabled><description>Dummy computer object for AD data export testing.</description></computer>
 					</computers>
 					<ous></ous>
 				</ou>

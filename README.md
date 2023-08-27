@@ -76,14 +76,20 @@ Default is `XML`.
 ### -IncludeComputers
 Optional switch.  
 If specified, the output will additionally include representations of child computer objects present in the target OU(s).  
+In `Simplified` format, the data includes only the computer names.  
+In `XML` format, the data additionally includes the computer objects' enabled status and description.  
 
 ### -IncludeGpos
 Optional switch.  
 If specified, the output will additionally include representations of GPOs directly linked to the target OU(s).  
+In `Simplified` format, the data includes only the GPO names.  
+In `XML` format, that data additionally includes the links' enabled and enforced statuses, the links' orders, and the GPOs' GUIDs.  
 
 ### -IncludeGpoInheritance
 Optional switch.  
 If specified, the output will additionally include representations of the state of GPO inheritance blocking for the target OU(s), and GPO links inherited from above the given parent OU.  
+In `Simplified` format, the data includes only the GPO names.  
+In `XML` format, that data additionally includes the links' enabled and enforced statuses, the links' orders, and the GPOs' GUIDs.  
 
 ### -NoOuEndCap
 Optional switch.  

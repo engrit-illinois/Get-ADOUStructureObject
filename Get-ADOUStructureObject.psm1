@@ -76,7 +76,7 @@ function Get-ADOUStructureObject {
 		else {
 			# For optimization if not outputting an object to the pipeline
 			# Because the script actually only needs Name and DistinguishedName to function otherwise
-			$comps = Get-ADComputer -Filter "*" -SearchBase $OUDN -Properties "Name","DistinguishedName" | Select Name,DistinguishedName | Sort Name
+			$comps = Get-ADComputer -Filter "*" -SearchBase $OUDN -Properties "Name","DistinguishedName","Description","Enabled" | Select Name,DistinguishedName,Description,Enabled | Sort Name
 		}
 		$comps
 	}
@@ -144,6 +144,8 @@ function Get-ADOUStructureObject {
 						}
 					}
 					"compName" { return "<name>$data</name>" }
+					"compEnabled" { return "<enabled>$data</enabled>" }
+					"compDescription" { return "<description>$data</description>" }
 					
 					"ousCap" {
 						switch($side) {
@@ -206,6 +208,8 @@ function Get-ADOUStructureObject {
 					"compsCap" { return $null }
 					"compCap" { return $null }
 					"compName" { return $data }
+					"compEnabled" { return $null }
+					"compDescription" { return $null }
 					
 					"ousCap" { return $null }
 					"ouCap" {
@@ -353,9 +357,11 @@ function Get-ADOUStructureObject {
 				
 				$compCapStart = Get-ExportFormatted "compCap" $null "start"
 				$compName = Get-ExportFormatted "compName" $comp.Name
+				$compEnabled = Get-ExportFormatted "compEnabled" $comp.Enabled
+				$compDescription = Get-ExportFormatted "compDescription" $comp.Description
 				$compCapEnd = Get-ExportFormatted "compCap" $null "end"
 				
-				$compNameLine = $compCapStart + $compName + $compCapEnd
+				$compNameLine = $compCapStart + $compName + $compEnabled + $compDescription + $compCapEnd
 				Export $compNameLine $indent1
 			}
 			
