@@ -49,7 +49,7 @@ Output everything to a file in simplified format:
 ```powershell
 $oudn = "OU=Instructional,OU=Desktops,OU=Engineering,OU=Urbana,DC=ad,DC=uillinois,DC=edu"
 $ts = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
-Get-ADOUStructureObject $oudn -IncludeComputers -IncludeGpos -IncludeGpoInheritance -Silent -OutputFilePath "c:\engrit\ews\Instructional-OU-Export_$($ts).xml"
+Get-ADOUStructureObject $oudn -IncludeComputers -IncludeGpos -IncludeGpoInheritance -Silent -OutputFilePath "c:\engrit\ews\Instructional OU Backups\Instructional-OU-Export_$($ts).xml"
 ```
 
 # Parameters
