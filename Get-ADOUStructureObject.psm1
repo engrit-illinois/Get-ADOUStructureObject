@@ -11,15 +11,19 @@ function Get-ADOUStructureObject {
 		
 		[switch]$IncludeComputers,
 		
+		[switch]$IncludeGpos,
+		
 		[switch]$NoOuEndCap,
 		
 		[switch]$NoOuBrackets,
+		
+		[switch]$NoGpoBrackets,
 		
 		[string]$IndentChar = "`t",
 		
 		[switch]$Silent,
 		
-		[switch]$OutputObject
+		[switch]$PassThru
 	)
 	
 	$OUTPUT_FORMAT_CAPS = $false
@@ -30,7 +34,7 @@ function Get-ADOUStructureObject {
 	}
 	
 	function Get-Ous {
-		if($OutputObject) {
+		if($PassThru) {
 			$ous = Get-ADOrganizationalUnit -Filter "*" -SearchBase $OUDN
 		}
 		else {
@@ -41,8 +45,13 @@ function Get-ADOUStructureObject {
 		$ous
 	}
 	
+	function Get-GPOs {
+		
+		$gpos
+	}
+	
 	function Get-Comps {
-		if($OutputObject) {
+		if($PassThru) {
 			$comps = Get-ADComputer -Filter "*" -SearchBase $OUDN
 		}
 		else {
@@ -77,43 +86,67 @@ function Get-ADOUStructureObject {
 		$childObjects
 	}
 	
-	function Get-ExportFormatted($type, $name, $side) {
+	function Get-ExportFormatted($type, $data, $side) {
 		switch($OutputFormat) {
 			"HumanReadable" {
 				switch($type) {
-					"comp" {
-						return $name
+					"gposCap" { return $null }
+					"gpoCap" { return $null }
+					"gpoName" {
+						if($NoGpoBrackets) { return $data }
+						else { return "<$data>" }
 					}
-					"compCap" { 
-						# Currently doing this on the same line as each comp
-						return $null
-					}
+					"gpoId" { return $null }
+					"gpoEnabled" { return $null }
+					"gpoEnforced" { return $null }
+					"gpoOrder" { return $null }
+					
 					"compsCap" { return $null }
-					"ou" { return $null }
+					"compCap" { return $null }
+					"compName" { return $data }
+					
+					"ousCap" { return $null }
 					"ouCap" {
 						switch($side) {
 							"start" {
-								if($NoOuBrackets) { return $name }
-								else { return "[$name]" }
+								if($NoOuBrackets) { return $data }
+								else { return "[$data]" }
 							}
 							"end" {
-								if($NoOuBrackets) { return "End $name" }
-								else { return "End [$name]" }
+								if($NoOuBrackets) { return "End $data" }
+								else { return "End [$data]" }
 							}
 							Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
 						}
 					}
-					"ousCap" { return $null }
+					"ouName" { return $null }
+					"ouGpoInheritanceBlocked" { return $null }
+					
 					Default { return "Invalid `$type sent to Get-ExportFormatted()!" }
 				}
 			}
 			"XML" {
 				switch($type) {
-					"comp" { return "<computer><name>$name</name></computer>" }
-					"compCap" {
-						# Currently doing this on the same line as each comp
-						return $null
+					"gposCap" {
+						switch($side) {
+							"start" { return "<gpos>" }
+							"end" { return "</gpos>" }
+							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
+						}
 					}
+					"gpoCap" {
+						switch($side) {
+							"start" { return "<gpo>" }
+							"end" { return "</gpo>" }
+							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
+						}
+					}
+					"gpoName" { return "<name>$data</name>" }
+					"gpoId" { return "<id>$data</id>" }
+					"gpoEnabled" { return "<enabled>$data</enabled>" }
+					"gpoEnforced" { return "<enforced>$data</enforced>" }
+					"gpoOrder" { return "<order>$data</order>" }
+					
 					"compsCap" {
 						switch($side) {
 							"start" { return "<computers>" }
@@ -121,14 +154,15 @@ function Get-ADOUStructureObject {
 							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
 						}
 					}
-					"ou" { return "<name>$name</name>" }
-					"ouCap" {
+					"compCap" {
 						switch($side) {
-							"start" { return "<ou>" }
-							"end" { return "</ou>" }
+							"start" { return "<computer>" }
+							"end" { return "</computer>" }
 							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
 						}
 					}
+					"compName" { return "<name>$data</name>" }
+					
 					"ousCap" {
 						switch($side) {
 							"start" { return "<ous>" }
@@ -136,6 +170,16 @@ function Get-ADOUStructureObject {
 							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
 						}
 					}
+					"ouCap" {
+						switch($side) {
+							"start" { return "<ou>" }
+							"end" { return "</ou>" }
+							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
+						}
+					}
+					"ouName" { return "<name>$data</name>" }
+					"ouGpoInheritanceBlocked" { return "<gpoInheritanceBlocked>$data</gpoInheritanceBlocked>" }
+					
 					Default { return "Invalid `$type sent to Get-ExportFormatted()!" }
 				}
 			}
@@ -158,26 +202,60 @@ function Get-ADOUStructureObject {
 	}
 	
 	function Export-Structure($object) {
-		#$name = $($object.OU.Name)
-		#$nameStart = Get-ExportFormatted "ou" $name "start" 
-		#$nameEnd = Get-ExportFormatted "ou" $name "end"
-		
-		#Export $nameStart 0 $false
-		#Export-Children $object 1
-		#Export $nameEnd 0
-		
 		Export-Header
-		
 		Export-Ou $object 0
 	}
 	
 	function Export-Children($object, $indent) {
+		
+		if($IncludeGpos) {
+			Export-Gpos $object $indent
+		}
 			
 		if($IncludeComputers) {
 			Export-ChildComps $object $indent
 		}
 		
 		Export-ChildOus $object $indent
+	}
+	
+	function Get-GpoInheritance($object) {
+		$dn = $object.OU.DistinguishedName
+		
+		$gpoInheritance = Get-GpInheritance -Target $dn
+		$object | Add-Member -NotePropertyName "GpoInheritance" -NotePropertyValue $gpoInheritance
+		
+		$object
+	}
+	
+	function Export-Gpos($object, $indent) {
+		
+		$indent1 = $indent
+		if($OUTPUT_FORMAT_CAPS) {
+			$indent1 = $indent + 1
+		}
+		
+		$gposCapStart = Get-ExportFormatted "gposCap" $null "start"
+		Export $gposCapStart $indent
+		
+		$object.GpoInheritance.GpoLinks | ForEach-Object {
+			$gpo = $_
+			
+			$gpoCapStart = Get-ExportFormatted "gpoCap" $null "start"
+			$gpoName = Get-ExportFormatted "gpoName" $gpo.DisplayName
+			$gpoEnabled = Get-ExportFormatted "gpoEnabled" $gpo.Enabled
+			$gpoEnforced = Get-ExportFormatted "gpoEnforced" $gpo.Enforced
+			$gpoOrder = Get-ExportFormatted "gpoOrder" $gpo.Order
+			$gpoId = Get-ExportFormatted "gpoId" $gpo.GpoId
+			$gpoCapEnd = Get-ExportFormatted "gpoCap" $null "end"
+			
+			$gpoNameLine = $gpoCapStart + $gpoName + $gpoEnabled + $gpoEnforced + $gpoOrder + $gpoId + $gpoCapEnd
+			Export $gpoNameLine $indent1
+		}
+		
+		$gposCapEnd = Get-ExportFormatted "gposCap" $null "end"
+		Export $gposCapEnd $indent
+		
 	}
 	
 	function Export-ChildComps($object, $indent) {
@@ -192,16 +270,12 @@ function Get-ADOUStructureObject {
 		
 		foreach($comp in $object.Computers) {
 			
-			# Combined compCap into comp line
-			#$compCapStart = Get-ExportFormatted "compCap" $null "start"
-			#Export $compCapStart $indent1
+			$compCapStart = Get-ExportFormatted "compCap" $null "start"
+			$compName = Get-ExportFormatted "compName" $comp.Name
+			$compCapEnd = Get-ExportFormatted "compCap" $null "end"
 			
-			$name = Get-ExportFormatted "comp" $comp.Name
-			#Export $name indent1
-			Export $name $indent1
-			
-			#$compCapEnd = Get-ExportFormatted "compCap" $null "end"
-			#Export $compCapEnd $indent1
+			$compNameLine = $compCapStart + $compName + $compCapEnd
+			Export $compNameLine $indent1
 		}
 		
 		$compsCapEnd = Get-ExportFormatted "compsCap" $null "end"
@@ -234,24 +308,15 @@ function Get-ADOUStructureObject {
 		#}
 		$indent1 = $indent + 1
 		
-		$ouCapstart = Get-ExportFormatted "ouCap" $object.OU.Name "start"
-		if($OUTPUT_FORMAT_CAPS) {
-			# Putting the <name> tag on the same line as <ou> for condensed readability
-			Export $ouCapStart $indent $true $true
-		}
-		else {
-			Export $ouCapStart $indent
-		}
+		$ouCapStart = Get-ExportFormatted "ouCap" $object.OU.Name "start"
+		Export $ouCapStart $indent
 		
+		$ouName = Get-ExportFormatted "ouName" $object.OU.Name
+		Export $ouName $indent1
 		
-		$name = Get-ExportFormatted "ou" $object.OU.Name
-		if($OUTPUT_FORMAT_CAPS) {
-			# Putting the <name> tag on the same line as <ou> for condensed readability
-			Export $name 0
-		}
-		else {
-			Export $name $indent1
-		}
+		$object = Get-GpoInheritance $object
+		$ouGpoInheritanceBlocked = Get-ExportFormatted "ouGpoInheritanceBlocked" $object.GpoInheritance.GpoInheritanceBlocked
+		Export $ouGpoInheritanceBlocked $indent1
 		
 		Export-Children $object $indent1
 		
@@ -313,7 +378,7 @@ function Get-ADOUStructureObject {
 		if(
 			(!$OutputFilePath) -and
 			($Silent) -and
-			(!$OutputObject)
+			(!$PassThru)
 		) {
 			Write-Host "No forms of output were requested. Aborting."
 		}
@@ -334,7 +399,7 @@ function Get-ADOUStructureObject {
 			
 			Export-Structure $object
 			
-			if($OutputObject) {
+			if($PassThru) {
 				$object
 			}
 		}

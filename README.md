@@ -1,13 +1,41 @@
 # Summary
 Takes an OU and prints a visual, textual representation of the OU and it's sub-OUs and computers, retaining the OU structure. Optionally outputs to a file in simplified or XML format. Optionally outputs a Powershell object to the pipeline containing all of the data about all OUs and computers discovered, which also retains the OU structure.  
 
+# Requirements
+
+
+
 # Usage
 1. Download `Get-ADOUStructure.psm1` to the appropriate subdirectory of your PowerShell [modules directory](https://github.com/engrit-illinois/how-to-install-a-custom-powershell-module).
-2. Run it, e.g.:
-    - `Get-ADOUStructureObject "OU=Given OU,OU=Desktops,OU=Engineering,OU=Urbana,DC=ad,DC=uillinois,DC=edu"`
-    - `Get-ADOUStructureObject -OUDN "OU=Given OU,OU=Desktops,OU=Engineering,OU=Urbana,DC=ad,DC=uillinois,DC=edu" -OutputFilePath "c:\ou-structure.xml" -OutputFormat "XML"`
+2. Run it using the examples and documentation provided below.
 
-For a preview of what the output looks like, see [output-example.txt](output-example.txt) and [output-example.xml](output-example.xml).  
+# Examples
+For brevity and clarity, the examples below use the `$oudn` variable to represent the full OUDN being specified. If you want to preview the output for these examples, you may use the following value for `$oudn`, which refers to a test OU set up specifically to test this module's functionality:  
+`$oudn = "OU=export-test-ou,OU=mseng3,OU=Staff Desktops,OU=NoInheritance,OU=Instructional,OU=Desktops,OU=Engineering,OU=Urbana,DC=ad,DC=uillinois,DC=edu"`  
+
+Some pre-generated previews are provided in [output-example.txt](output-example.txt) and [output-example.xml](output-example.xml).  
+
+### HumanReadable format examples
+
+OU structure only:  
+`Get-ADOUStructureObject $oudn`  
+
+OU structure + computer objects:  
+`Get-ADOUStructureObject $oudn` -IncludeComputers
+
+OU structure + computer objects + GPOs:  
+`Get-ADOUStructureObject $oudn` -IncludeComputers -IncludeGpos
+
+### XML format examples
+
+OU structure only:  
+`Get-ADOUStructureObject $oudn -OutputFormat "XML"`  
+
+OU structure + computer objects:  
+`Get-ADOUStructureObject $oudn -OutputFormat "XML"` -IncludeComputers
+
+OU structure + computer objects + GPOs:  
+`Get-ADOUStructureObject $oudn -OutputFormat "XML"` -IncludeComputers -IncludeGpos
 
 # Parameters
 
@@ -26,8 +54,11 @@ Has no effect if `-OutputFilePath` is not specified.
 
 ### -IncludeComputers
 Optional switch.  
-By default the output includes only the OU structure.  
-If specified, the output will include child computers as well.  
+If specified, the output will additionally include representations of child computer objects present in the target OU(s).  
+
+### -IncludeGpos
+Optional switch.  
+If specified, the output will additionally include representations of GPOs linked to the target OU(s).  
 
 ### -NoOuEndCap
 Optional switch.  
@@ -57,7 +88,7 @@ If specified, nothing is written to the console.
 By default, the same output that would be written to a file is also written to the console.  
 For large OUs, the default output behavior can be somewhat pointless, as it may overrun the console buffer, especially if using a default buffer size.  
 
-### -OutputObject
+### -PassThru
 Optional switch.  
 If specified, the object which the script uses to store all of the gathered data is output to the pipeline, for you to do with as you see fit.  
 
