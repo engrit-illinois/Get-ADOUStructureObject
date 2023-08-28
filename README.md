@@ -1,5 +1,7 @@
 # Summary
-Takes an OU and prints a visual, textual representation of the OU and it's sub-OUs and computers, retaining the OU structure. Optionally outputs to a file in simplified or XML format. Optionally outputs a Powershell object to the pipeline containing all of the data about all OUs and computers discovered, which also retains the OU structure.  
+Takes an OU and prints a visual, textual representation of the OU and it's sub-OUs and computers, retaining the OU structure. Optionally outputs to a file in simplified or XML format. Optionally outputs a Powershell object to the pipeline containing all of the data about all sub-OUs, computer objects, and GPO links, including GPO inheritance information.  
+
+This module was originally written as a helper function for [Get-RdcmanFileForOu](https://github.com/engrit-illinois/Get-RdcmanFileForOu), but has been expanded to additionally act as a way to quickly back up OU configuration data to a file, with the goal of easily referencing past states in a human-digestible format, to aid in manual reconstruction in the case of accidental deletion/corruption, etc. Currently the data exported to file is intentionally incomplete and heavily curated.  
 
 # Usage
 1. Download `Get-ADOUStructure.psm1` to the appropriate subdirectory of your PowerShell [modules directory](https://github.com/engrit-illinois/how-to-install-a-custom-powershell-module).
