@@ -284,7 +284,14 @@ function Get-ADOUStructureObject {
 		
 		# Workaround for a bug in Get-GpInheritance in PowerShell 7
 		# https://techcommunity.microsoft.com/t5/windows-powershell/using-get-gpinheritance-command-in-powershell-7/m-p/2061936
-		Import-Module -Name "GroupPolicy" -Force -SkipEditionCheck
+		# https://github.com/PowerShell/PowerShell/issues/18519
+		# -SkipEditionCheck fixes the issue, but this parameter doesn't exist before v7
+		if($host.Version.Major -eq 7) {
+			Import-Module -Name "GroupPolicy" -Force -SkipEditionCheck
+		}
+		else {
+			Import-Module -Name "GroupPolicy" -Force
+		}
 		
 		$gpoInheritance = Get-GpInheritance -Target $dn
 		$object | Add-Member -NotePropertyName "GpoInheritance" -NotePropertyValue $gpoInheritance
