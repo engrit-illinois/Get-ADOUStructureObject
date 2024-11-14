@@ -366,6 +366,20 @@ function Get-ADOUStructureObject {
 				$compName = Get-ExportFormatted "compName" $comp.Name
 				$compEnabled = Get-ExportFormatted "compEnabled" $comp.Enabled
 				$compDescription = Get-ExportFormatted "compDescription" $comp.Description
+				# Rarely, descriptions will contain newlines, which breaks the code folding ability of text editors (Notepad++ and VSCode at least).
+				# There's no legitimate reason for newlines in a description, so just remove them.
+				$compDescription = $compDescription.Replace("`n","")
+				$compDescription = $compDescription.Replace("`r","")
+				
+				if($OutputFormat -eq "XML") {
+					# Descriptions can also contain other characters which break the XML format (e.g. "<", and ">", etc.).
+					# So lets' make sure nothing in the description is ever parsed by putting it in inside CDATA tags.
+					# https://www.w3schools.com/xml/dom_cdatasection.asp
+					# This comes with the downside that the raw data inside the <description> tag now contains data which is not strictly representative of the raw description data. But that can just be a caveat to note in the readme, and it could easily be removed programmatically if necessary.
+					# On the other hand this keeps the data in a human-readable format versus encoding it somehow.
+					$compDescription = "<![CDATA[$($compDescription)]]>"
+				}
+				
 				$compCapEnd = Get-ExportFormatted "compCap" $null "end"
 				
 				$compLine = $compCapStart + $compName + $compEnabled + $compDescription + $compCapEnd

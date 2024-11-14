@@ -74,6 +74,7 @@ When using `Simplified` format, the following syntax is used to denote different
   - `computer-name` (i.e. no special characters)
 
 Default is `XML`.  
+Note: When using `-OutputFormat "XML"` with `-IncludeComputers`, the computer object description data captured in the XML output is "sanitized" by wrapping it all in [CDATA](https://www.w3schools.com/xml/dom_cdatasection.asp) tags, so that it can contain characters such as `<` and `>`, etc. without breaking the XML formatting. This comes with the downside that the raw data inside the `<description>` tags will contain extraneous characters (`<![CDATA[` and `]]>`) wrapping the raw description data. But these can be easily targeted and removed programmatically if necessary. However this keeps the data in a human-readable format versus encoding it somehow.  
 
 ### -IncludeComputers
 Optional switch.  
