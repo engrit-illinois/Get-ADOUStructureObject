@@ -113,14 +113,14 @@ function Get-ADOUStructureObject {
 						switch($side) {
 							"start" { return "<gpos>" }
 							"end" { return "</gpos>" }
-							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
+							Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
 						}
 					}
 					"gpoCap" {
 						switch($side) {
 							"start" { return "<gpo>" }
 							"end" { return "</gpo>" }
-							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
+							Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
 						}
 					}
 					"gpoName" { return "<name>$data</name>" }
@@ -133,14 +133,14 @@ function Get-ADOUStructureObject {
 						switch($side) {
 							"start" { return "<computers>" }
 							"end" { return "</computers>" }
-							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
+							Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
 						}
 					}
 					"compCap" {
 						switch($side) {
 							"start" { return "<computer>" }
 							"end" { return "</computer>" }
-							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
+							Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
 						}
 					}
 					"compName" { return "<name>$data</name>" }
@@ -151,14 +151,14 @@ function Get-ADOUStructureObject {
 						switch($side) {
 							"start" { return "<ous>" }
 							"end" { return "</ous>" }
-							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
+							Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
 						}
 					}
 					"ouCap" {
 						switch($side) {
 							"start" { return "<ou>" }
 							"end" { return "</ou>" }
-							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
+							Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
 						}
 					}
 					"ouName" { return "<name>$data</name>" }
@@ -167,7 +167,7 @@ function Get-ADOUStructureObject {
 						switch($side) {
 							"start" { return "<gpoInheritance>" }
 							"end" { return "</gpoInheritance>" }
-							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
+							Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
 						}
 					}
 					"gpoInheritanceBlocked" { return "<gpoInheritanceBlocked>$data</gpoInheritanceBlocked>" }
@@ -175,14 +175,14 @@ function Get-ADOUStructureObject {
 						switch($side) {
 							"start" { return "<inheritedGpos>" }
 							"end" { return "</inheritedGpos>" }
-							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
+							Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
 						}
 					}
 					"gpoInheritanceGpoCap" {
 						switch($side) {
 							"start" { return "<inheritedGpo>" }
 							"end" { return "</inheritedGpo>" }
-							Default { return "Invalid `$side sent to t-ExportFormatted()!" }
+							Default { return "Invalid `$side sent to Get-ExportFormatted()!" }
 						}
 					}
 					
@@ -334,8 +334,8 @@ function Get-ADOUStructureObject {
 				$gpoId = Get-ExportFormatted "gpoId" $gpo.GpoId
 				$gpoCapEnd = Get-ExportFormatted "gpoCap" $null "end"
 				
-				$gpoNameLine = $gpoCapStart + $gpoName + $gpoEnabled + $gpoEnforced + $gpoOrder + $gpoId + $gpoCapEnd
-				Export $gpoNameLine $indent1
+				$gpoLine = $gpoCapStart + $gpoName + $gpoEnabled + $gpoEnforced + $gpoOrder + $gpoId + $gpoCapEnd
+				Export $gpoLine $indent1
 			}
 			
 			Export $gposCapEnd $indent
@@ -368,8 +368,8 @@ function Get-ADOUStructureObject {
 				$compDescription = Get-ExportFormatted "compDescription" $comp.Description
 				$compCapEnd = Get-ExportFormatted "compCap" $null "end"
 				
-				$compNameLine = $compCapStart + $compName + $compEnabled + $compDescription + $compCapEnd
-				Export $compNameLine $indent1
+				$compLine = $compCapStart + $compName + $compEnabled + $compDescription + $compCapEnd
+				Export $compLine $indent1
 			}
 			
 			Export $compsCapEnd $indent
@@ -433,10 +433,20 @@ function Get-ADOUStructureObject {
 		$indent1 = $indent + 1
 		
 		$ouCapStart = Get-ExportFormatted "ouCap" $object.OU.Name "start"
-		Export $ouCapStart $indent
+		#Export $ouCapStart $indent
 		
 		$ouName = Get-ExportFormatted "ouName" $object.OU.Name
-		Export $ouName $indent1
+		#Export $ouName $indent1
+		
+		# Putting OU name on opening tag line (for XML output) for easier "foldability" when viewing in an XML editor (such as Notepad++)
+		if($OutputFormat -ne "XML") {
+			Export $ouCapStart $indent
+			Export $ouName $indent1
+		}
+		else {
+			$ouStartLine = $ouCapStart + $ouName
+			Export $ouStartLine $indent
+		}
 		
 		Export-Children $object $indent1
 		
